@@ -4,6 +4,18 @@ export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: () => true,
+    create: ({ req: { user } }) => {
+      // Viewers cannot create media
+      return user?.role !== 'viewer'
+    },
+    update: ({ req: { user } }) => {
+      // Viewers cannot update media
+      return user?.role !== 'viewer'
+    },
+    delete: ({ req: { user } }) => {
+      // Only super admins and admins can delete media
+      return user?.role === 'super-admin' || user?.role === 'admin'
+    },
   },
   fields: [
     {
