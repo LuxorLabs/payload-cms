@@ -131,9 +131,9 @@ export interface User {
   id: number;
   name: string;
   /**
-   * User role determines access permissions
+   * User role determines access permissions. Super Admin can manage all companies.
    */
-  role: 'admin' | 'marketing' | 'product' | 'viewer';
+  role: 'super-admin' | 'admin' | 'marketing' | 'product' | 'viewer';
   updatedAt: string;
   createdAt: string;
   email: string;

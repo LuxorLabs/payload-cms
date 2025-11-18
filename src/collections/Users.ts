@@ -7,6 +7,33 @@ export const Users: CollectionConfig = {
     defaultColumns: ['email', 'role', 'name'],
   },
   auth: true,
+  access: {
+    // Anyone authenticated can read users (needed for relationships)
+    read: () => true,
+    // Only super admins can create new users
+    create: ({ req: { user } }) => {
+      return user?.role === 'super-admin'
+    },
+    // Users can update themselves, super admins can update anyone, but others cannot update super admins
+    update: ({ req: { user }, id }) => {
+      if (user?.role === 'super-admin') {
+        return true
+      }
+      // Regular users can only update their own profile
+      if (user && id) {
+        return {
+          id: {
+            equals: user.id,
+          },
+        }
+      }
+      return false
+    },
+    // Only super admins can delete users
+    delete: ({ req: { user } }) => {
+      return user?.role === 'super-admin'
+    },
+  },
   fields: [
     // Email added by default
     {
@@ -26,6 +53,12 @@ export const Users: CollectionConfig = {
       ],
       defaultValue: 'viewer',
       required: true,
+      access: {
+        // Only super admins can change roles
+        update: ({ req: { user } }) => {
+          return user?.role === 'super-admin'
+        },
+      },
       admin: {
         description: 'User role determines access permissions. Super Admin can manage all companies.',
       },
