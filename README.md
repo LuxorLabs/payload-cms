@@ -1,101 +1,300 @@
-# Payload Cloudflare Template
+# Tenki Blog - Payload CMS on Cloudflare
+
+A modern, SEO-optimized blog platform built with Payload CMS, Next.js 15, and deployed on Cloudflare infrastructure.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/payloadcms/payload/tree/main/templates/with-cloudflare-d1)
 
-**This can only be deployed on Paid Workers right now due to size limits.** This template comes configured with the bare minimum to get started on anything you need.
+## Features
 
-## Quick start
+✨ **Full-Featured Blog**
+- Rich text editing with Payload's Lexical editor
+- Draft/publish workflow with scheduling
+- Version history and autosave
+- SEO optimization built-in
+- Image management with Cloudflare R2
 
-This template can be deployed directly to Cloudflare Workers by clicking the button to take you to the setup screen.
+🎨 **Modern UI**
+- Built with Next.js 15 and React 19
+- Styled with Tailwind CSS and shadcn/ui
+- Responsive design
+- Dark mode support
 
-From there you can connect your code to a git provider such Github or Gitlab, name your Workers, D1 Database and R2 Bucket as well as attach any additional environment variables or services you need.
+🔐 **Role-Based Access Control**
+- Admin, Marketing, Product, and Viewer roles
+- Granular permissions for content management
+- Secure authentication
 
-## Quick Start - local setup
+🚀 **Cloudflare-Native**
+- D1 SQLite database
+- R2 object storage for media
+- Workers for edge deployment
+- Global CDN distribution
 
-To spin up this template locally, follow these steps:
+📊 **Content Collections**
+- **Posts**: Blog posts with full SEO support
+- **Authors**: Author profiles with social links
+- **Categories**: Content organization
+- **Tags**: Topic tagging system
+- **Media**: Optimized image handling
 
-### Clone
+## Documentation
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. Cloudflare will connect your app to a git provider such as Github and you can access your code from there.
+- **[Content Guide](./CONTENT_GUIDE.md)**: Complete guide for content creators
+- **[Deployment Guide](./DEPLOYMENT.md)**: Technical deployment instructions
+- **[Migration Script](./scripts/migrate-blog-content.ts)**: Import existing blog content
 
-### Local Development
+## Quick Start
 
-## How it works
+### Prerequisites
 
-Out of the box, using [`Wrangler`](https://developers.cloudflare.com/workers/wrangler/) will automatically create local bindings for you to connect to the remote services and it can even create a local mock of the services you're using with Cloudflare.
+- Node.js 18.20.2+ or 20.9.0+
+- pnpm 9+ or 10+
+- Cloudflare account
 
-We've pre-configured Payload for you with the following:
-
-### Collections
-
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
-
-- #### Users (Authentication)
-
-  Users are auth-enabled collections that have access to the admin panel.
-
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
-
-- #### Media
-
-  This is the uploads enabled collection.
-
-### Image Storage (R2)
-
-Images will be served from an R2 bucket which you can then further configure to use a CDN to serve for your frontend directly.
-
-### D1 Database
-
-The Worker will have direct access to a D1 SQLite database which Wrangler can connect locally to, just note that you won't have a connection string as you would typically with other providers.
-
-You can enable read replicas by adding `readReplicas: 'first-primary'` in the DB adapter and then enabling it on your D1 Cloudflare dashboard. Read more about this feature on [our docs](https://payloadcms.com/docs/database/sqlite#d1-read-replicas).
-
-## Working with Cloudflare
-
-Firstly, after installing dependencies locally you need to authenticate with Wrangler by running:
+### 1. Clone and Install
 
 ```bash
-pnpm wrangler login
+git clone <your-repo-url>
+cd payload-cms
+pnpm install
 ```
 
-This will take you to Cloudflare to login and then you can use the Wrangler CLI locally for anything, use `pnpm wrangler help` to see all available options.
+### 2. Environment Setup
 
-Wrangler is pretty smart so it will automatically bind your services for local development just by running `pnpm dev`.
-
-## Deployments
-
-When you're ready to deploy, first make sure you have created your migrations:
+Create a `.env` file:
 
 ```bash
-pnpm payload migrate:create
+PAYLOAD_SECRET=your-secret-key  # Generate with: openssl rand -hex 32
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Then run the following command:
+### 3. Generate Types
 
 ```bash
+pnpm run generate:types
+```
+
+### 4. Start Development Server
+
+```bash
+pnpm run dev
+```
+
+Visit:
+- Frontend: http://localhost:3000
+- Blog: http://localhost:3000/blog
+- Admin Panel: http://localhost:3000/admin
+
+### 5. Create First User
+
+1. Navigate to http://localhost:3000/admin
+2. Register with:
+   - Name
+   - Email
+   - Password
+   - Role: Admin
+
+## Collections
+
+### Posts
+
+Full-featured blog posts with:
+- Rich text content (Lexical editor)
+- SEO metadata (title, description, OG image, canonical URL)
+- Featured images
+- Author attribution
+- Category and tag organization
+- Draft/publish workflow
+- Publishing scheduler
+- Reading time estimation
+- Version history
+
+### Authors
+
+Author profiles including:
+- Name and bio
+- Avatar image
+- Role (Marketing, Product, Engineering, Leadership)
+- Social links (Twitter, LinkedIn, GitHub)
+
+### Categories
+
+Broad content organization:
+- Name and slug
+- Description
+- Color coding for badges
+
+### Tags
+
+Specific topic tagging:
+- Name and slug
+- Used for filtering and discovery
+
+### Media
+
+Image management with:
+- Cloudflare R2 storage
+- Alt text for accessibility
+- Caption and credit fields
+- Multiple size variants (thumbnail, card, featured)
+
+## Project Structure
+
+```
+payload-cms/
+├── src/
+│   ├── app/
+│   │   ├── (frontend)/          # Public-facing pages
+│   │   │   ├── blog/            # Blog pages
+│   │   │   │   ├── page.tsx     # Blog listing
+│   │   │   │   ├── [slug]/      # Individual posts
+│   │   │   │   ├── category/    # Category pages
+│   │   │   │   └── tag/         # Tag pages
+│   │   │   └── page.tsx         # Homepage
+│   │   ├── (payload)/           # Admin panel
+│   │   │   └── admin/           # Payload admin UI
+│   │   └── globals.css          # Global styles
+│   ├── collections/             # Payload collections
+│   │   ├── Posts.ts
+│   │   ├── Authors.ts
+│   │   ├── Categories.ts
+│   │   ├── Tags.ts
+│   │   ├── Media.ts
+│   │   └── Users.ts
+│   ├── components/
+│   │   ├── blog/               # Blog components
+│   │   │   ├── BlogCard.tsx
+│   │   │   └── RichText.tsx
+│   │   └── ui/                 # shadcn/ui components
+│   │       ├── card.tsx
+│   │       └── badge.tsx
+│   ├── lib/
+│   │   └── utils.ts            # Utility functions
+│   ├── payload.config.ts       # Payload configuration
+│   └── payload-types.ts        # Generated types
+├── scripts/
+│   └── migrate-blog-content.ts # Migration script
+├── CONTENT_GUIDE.md            # Content creator guide
+├── DEPLOYMENT.md               # Deployment guide
+└── README.md                   # This file
+```
+
+## Technology Stack
+
+| Category | Technology |
+|----------|------------|
+| **CMS** | Payload CMS 3.63 |
+| **Framework** | Next.js 15.4 |
+| **UI Library** | React 19.1 |
+| **Styling** | Tailwind CSS 4.1 |
+| **Components** | shadcn/ui |
+| **Database** | Cloudflare D1 (SQLite) |
+| **Storage** | Cloudflare R2 |
+| **Deployment** | Cloudflare Workers |
+| **Editor** | Lexical (Payload) |
+| **Language** | TypeScript 5.7 |
+
+## Deployment
+
+### Deploy to Cloudflare
+
+```bash
+# Set environment
+export CLOUDFLARE_ENV=production
+
+# Deploy (migrations + app)
 pnpm run deploy
 ```
 
-This will spin up Wrangler in `production` mode, run any created migrations, build the app and then deploy the bundle up to Cloudflare.
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-That's it! You can if you wish move these steps into your CI pipeline as well.
+## Content Migration
 
-## Enabling logs
+To migrate existing blog content:
 
-By default logs are not enabled for your API, we've made this decision because it does run against your quota so we've left it opt-in. But you can easily enable logs in one click in the Cloudflare panel, [see docs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/#enable-workers-logs).
+1. Create `data/existing-blog-posts.json` with your content
+2. Run the migration script:
 
-## Known issues
+```bash
+pnpm tsx scripts/migrate-blog-content.ts
+```
+
+See [scripts/migrate-blog-content.ts](./scripts/migrate-blog-content.ts) for format details.
+
+## Development Scripts
+
+```bash
+pnpm run dev              # Start development server
+pnpm run build           # Build for production
+pnpm run deploy          # Deploy to Cloudflare
+pnpm run deploy:database # Deploy database migrations only
+pnpm run deploy:app      # Deploy application only
+pnpm run preview         # Preview production build locally
+pnpm run generate:types  # Generate TypeScript types
+pnpm run lint            # Run ESLint
+pnpm run test            # Run tests
+```
+
+## Access Control
+
+### Roles and Permissions
+
+| Role | Posts | Authors | Categories | Tags | Delete |
+|------|-------|---------|------------|------|--------|
+| **Admin** | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✓ All |
+| **Marketing** | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✗ None |
+| **Product** | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✓ Create, Edit | ✗ None |
+| **Viewer** | Read only | Read only | Read only | Read only | ✗ None |
+
+Public users can only read published posts.
+
+## SEO Features
+
+- **Meta Tags**: Custom title and description
+- **Open Graph**: Social media preview images
+- **Canonical URLs**: Avoid duplicate content
+- **No-Index**: Control search indexing
+- **Keywords**: Target keyword tracking
+- **Structured Data**: Ready for schema markup
+- **Sitemap**: Auto-generated from posts
+- **Reading Time**: Auto-calculated
+
+## Known Issues
 
 ### GraphQL
 
-We are currently waiting on some issues with GraphQL to be [fixed upstream in Workers](https://github.com/cloudflare/workerd/issues/5175) so full support for GraphQL is not currently guaranteed when deployed.
+GraphQL support is currently limited due to [upstream issues in Workers](https://github.com/cloudflare/workerd/issues/5175). REST API is fully functional.
 
-### Worker size limits
+### Worker Size Limits
 
-We currently recommend deploying this template to the Paid Workers plan due to bundle [size limits](https://developers.cloudflare.com/workers/platform/limits/#worker-size) of 3mb. We're actively trying to reduce our bundle footprint over time to better meet this metric.
+This template requires **Paid Workers** plan due to bundle size (3MB limit). We're actively working to reduce bundle size.
 
-This also applies to your own code, in the case of importing a lot of libraries you may find yourself limited by the bundle.
+### Image Processing
 
-## Questions
+Image cropping and focal point features are disabled on Workers due to lack of `sharp` support. Images are stored as-is with size variants generated.
 
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+## Support & Resources
+
+- **Content Guide**: See [CONTENT_GUIDE.md](./CONTENT_GUIDE.md)
+- **Deployment Guide**: See [DEPLOYMENT.md](./DEPLOYMENT.md)
+- **Payload Docs**: https://payloadcms.com/docs
+- **Cloudflare Docs**: https://developers.cloudflare.com
+- **Discord**: https://discord.com/invite/payload
+- **GitHub Discussions**: https://github.com/payloadcms/payload/discussions
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+## License
+
+MIT
+
+---
+
+**Built with ❤️ by the Tenki team**
+
+For questions or support, contact your engineering team.
