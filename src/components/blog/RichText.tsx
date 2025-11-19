@@ -28,7 +28,7 @@ function serializeLexical(node: any): React.ReactNode {
       case 'paragraph':
         return <p>{children}</p>
       case 'heading':
-        const HeadingTag = `h${node.tag}` as keyof JSX.IntrinsicElements
+        const HeadingTag = `h${node.tag}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
         return <HeadingTag>{children}</HeadingTag>
       case 'list':
         return node.listType === 'number' ? <ol>{children}</ol> : <ul>{children}</ul>
