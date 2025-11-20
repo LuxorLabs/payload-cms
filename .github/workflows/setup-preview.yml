@@ -63,7 +63,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy --env preview
-          preCommands: opennextjs-cloudflare build --env preview
+          preCommands: pnpm exec opennextjs-cloudflare build --env preview
         env:
           PAYLOAD_SECRET: ${{ secrets.PREVIEW_PAYLOAD_SECRET }}
 
