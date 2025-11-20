@@ -57,6 +57,9 @@ jobs:
           command: r2 bucket create ${{ env.PREVIEW_R2_NAME }}
         continue-on-error: true
 
+      - name: Build application
+        run: pnpm run build
+
       - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
