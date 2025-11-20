@@ -67,9 +67,32 @@ jobs:
 
       - name: Extract and update database ID
         run: |
-          D1_ID=$(echo '${{ steps.get-d1-id.outputs.command-output }}' | python3 -m json.tool | grep -A 3 '"name": "${{ env.PREVIEW_D1_NAME }}"' | grep '"uuid"' | cut -d'"' -f4)
+          D1_ID=$(echo '${{ steps.get-d1-id.outputs.command-output }}' | python3 -c "import sys, json; dbs = json.load(sys.stdin); print(next((db['uuid'] for db in dbs if db['name'] == '${{ env.PREVIEW_D1_NAME }}'), ''))")
           echo "Database ID: $D1_ID"
-          sed -i "s/\"database_id\": \"DATABASE_ID\",/\"database_id\": \"$D1_ID\",/g" wrangler.jsonc
+          if [ -z "$D1_ID" ]; then
+            echo "Error: Could not find database ID"
+            exit 1
+          fi
+          # Update wrangler.jsonc using Python to only update the preview environment
+          python3 << EOF
+          import json, re
+          with open('wrangler.jsonc', 'r') as f:
+              content = f.read()
+          # Remove comments for JSON parsing
+          json_content = re.sub(r'//.*?\n|/\*.*?\*/', '', content, flags=re.DOTALL)
+          # Parse and update
+          config = json.loads(json_content)
+          if 'env' in config and 'preview' in config['env']:
+              for db in config['env']['preview']['d1_databases']:
+                  db['database_id'] = '$D1_ID'
+          # Write back (preserve original format with comments)
+          content = content.replace('"database_id": "DATABASE_ID",', '"database_id": "$D1_ID",', 1)
+          content = content.replace('"database_id": "DATABASE_ID"', '"database_id": "$D1_ID"')
+          with open('wrangler.jsonc', 'w') as f:
+              f.write(content)
+          EOF
+          echo "Updated wrangler.jsonc preview section:"
+          cat wrangler.jsonc | grep -A 10 '"preview"'
 
       - name: Deploy application
         run: CLOUDFLARE_ENV=preview pnpm run deploy
