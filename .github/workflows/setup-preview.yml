@@ -57,26 +57,13 @@ jobs:
           command: r2 bucket create ${{ env.PREVIEW_R2_NAME }}
         continue-on-error: true
 
-      - name: Build and Deploy Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env preview
-          preCommands: pnpm exec opennextjs-cloudflare build --env preview
+      - name: Deploy application
+        run: CLOUDFLARE_ENV=preview pnpm run deploy
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PAYLOAD_SECRET: ${{ secrets.PREVIEW_PAYLOAD_SECRET }}
-
-      - name: Set PAYLOAD_SECRET
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: secret put PAYLOAD_SECRET --name ${{ env.PREVIEW_WORKER_NAME }}
-          secrets: |
-            PAYLOAD_SECRET
-        env:
-          PAYLOAD_SECRET: ${{ secrets.PREVIEW_PAYLOAD_SECRET }}
+          NODE_ENV: production # just tells Next.js to do a production build (optimized), but doesn't affect the Cloudflare environment
 
       - name: Get D1 database info
         uses: cloudflare/wrangler-action@v3
