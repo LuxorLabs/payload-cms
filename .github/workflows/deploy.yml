@@ -63,3 +63,4 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+          NODE_ENV: production # should always be production for both staging and production environments because it controls Node.js/Next.js optimizations (minification, tree-shaking, etc.), not which infrastructure you're deploying to. The environment separation is handled by CLOUDFLARE_ENV
