@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X } from 'lucide-react'
+import { ListIcon, XIcon } from '@phosphor-icons/react'
 import { GithubLogo } from '@/assets/svg/github-logo.svg'
 import { Button, buttonVariants } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/logo'
 
@@ -109,45 +110,61 @@ export const Navigation = () => {
             >
               <GithubLogo /> Sign Up
             </Link>
-            <Button
-              aria-label={isSheetOpen ? 'Close Menu' : 'Open Menu'}
-              variant="ghost"
-              className="relative flex size-10 items-center justify-center lg:hidden"
-              onClick={() => setIsSheetOpen(!isSheetOpen)}
-            >
-              {isSheetOpen ? <X /> : <Menu />}
-            </Button>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  aria-label={isSheetOpen ? 'Close Menu' : 'Open Menu'}
+                  variant="ghost"
+                  className="relative flex size-10 items-center justify-center lg:hidden"
+                >
+                  <ListIcon
+                    className={cn(
+                      'absolute transition-all duration-200 lg:hidden',
+                      isSheetOpen && 'rotate-180 opacity-0',
+                    )}
+                  />
+                  <XIcon
+                    className={cn(
+                      'absolute transition-all duration-200 lg:hidden',
+                      !isSheetOpen && 'rotate-180 opacity-0',
+                    )}
+                  />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                className="inset-0 mt-[60px] min-w-screen bg-[#000D1B]/90 p-0 backdrop-blur-sm"
+                side={'left'}
+              >
+                <SheetHeader className="hidden">
+                  <SheetTitle />
+                </SheetHeader>
+                <ul className="divide-y divide-solid divide-white/[8%] border-b border-white/[8%]">
+                  {navItems.map((item, idx) => {
+                    const isActive = isNavItemActive(pathname, item.href)
+                    return (
+                      <li
+                        key={`nav-mobile-${idx}`}
+                        className={cn(
+                          'text-static-secondary px-4 py-4 text-lg',
+                          isActive && 'font-bold text-white',
+                        )}
+                      >
+                        <Link
+                          href={item.href}
+                          onClick={() => {
+                            setIsSheetOpen(false)
+                          }}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {isSheetOpen && (
-          <div className="border-t border-white/[8%] bg-[#000D1B]/90 backdrop-blur-sm lg:hidden">
-            <ul className="divide-y divide-solid divide-white/[8%]">
-              {navItems.map((item, idx) => {
-                const isActive = isNavItemActive(pathname, item.href)
-                return (
-                  <li
-                    key={`nav-mobile-${idx}`}
-                    className={cn(
-                      'text-static-secondary px-4 py-4 text-lg',
-                      isActive && 'font-bold text-white',
-                    )}
-                  >
-                    <Link
-                      href={item.href}
-                      onClick={() => {
-                        setIsSheetOpen(false)
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        )}
       </nav>
     </header>
   )

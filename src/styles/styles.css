@@ -72,6 +72,14 @@
   background: linear-gradient(to left, #000a15 5%, transparent 100%);
 }
 
+.fade-overlay-bottom {
+  background: linear-gradient(to top, #000a15 0%, transparent 100%);
+}
+
+.fade-overlay-top {
+  background: linear-gradient(to bottom, #000a15 0%, transparent 100%);
+}
+
 .banner-children {
   @apply flex flex-col gap-1;
 
