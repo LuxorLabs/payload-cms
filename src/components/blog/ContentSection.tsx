@@ -8,6 +8,8 @@ import LinkedinWhiteLogo from '@/assets/svg/linkedin-white-logo.svg'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { RichText } from './RichText'
+import { extractHeadingsFromLexical } from '@/utils/extract-headings'
+import { useActiveSection } from '@/utils/hooks/use-active-section'
 import type { Post, Author, Media } from '@/payload-types'
 
 type ContentProps = {
@@ -28,18 +30,52 @@ export const ContentSection = ({ post }: ContentProps) => {
 
   const authorAvatar = author.avatar as Media
 
+  // Extract headings from Lexical content
+  const headings = useMemo(() => extractHeadingsFromLexical(post.content), [post.content])
+  const headingIds = useMemo(() => headings.map((h) => h.id), [headings])
+  const activeId = useActiveSection(headingIds)
+
   return (
     <section className="mx-auto grid w-full max-w-[1000px] grid-cols-1 gap-0 px-6 md:px-12 lg:grid-cols-3 lg:gap-[60px] xl:px-0">
       <section className="order-last py-0 lg:order-first lg:py-8">
         <div className="lg:animate-fade-in">
           {post.excerpt && (
-            <div className="mb-6 hidden rounded-lg border border-gray-700 bg-gray-800/50 p-4 lg:block">
+            <div className="mb-6 hidden rounded-lg border border-[#36404c] bg-[#1d232a] p-4 lg:block">
               <span className="text-sm font-bold">TL;DR</span>
               <p className="text-sm">{post.excerpt}</p>
             </div>
           )}
+          {headings.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-sm text-[#9ca3af]">Table of contents</h3>
+              <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
+              <ul className="space-y-2 text-sm text-white">
+                {headings.map((heading) => (
+                  <li
+                    key={heading.id}
+                    className={cn('mt-2.5', {
+                      'ml-0': heading.level === 1,
+                      'ml-4': heading.level === 2,
+                      'ml-8': heading.level === 3,
+                      'ml-12': heading.level === 4,
+                    })}
+                  >
+                    <Link
+                      href={`#${heading.id}`}
+                      className={cn(
+                        'transition-colors duration-200 hover:text-white/80',
+                        activeId === heading.id && 'font-bold text-white',
+                      )}
+                    >
+                      {heading.text}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <div className="mt-6">
-            <h3 className="text-sm text-gray-400">Author</h3>
+            <h3 className="text-sm text-[#9ca3af]">Author</h3>
             <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
             <div className="mt-2.5 flex items-center gap-2">
               <div className="relative size-9">
@@ -75,7 +111,7 @@ export const ContentSection = ({ post }: ContentProps) => {
             </div>
           </div>
           <div className="mt-6">
-            <h3 className="text-sm text-gray-400">Share</h3>
+            <h3 className="text-sm text-[#9ca3af]">Share</h3>
             <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
             <div className="mt-2.5 flex gap-2">
               <Button
@@ -85,7 +121,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     setTimeout(() => setCopied(false), 3000)
                   })
                 }}
-                className="cursor-pointer hover:border-gray-400"
+                className="cursor-pointer hover:border-[#9ca3af]"
                 variant="secondary"
                 size="icon"
               >
@@ -99,7 +135,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-gray-400'
+                  'hover:border-[#9ca3af]'
                 )}
               >
                 <XLogoIcon size={20} />
@@ -112,7 +148,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-gray-400'
+                  'hover:border-[#9ca3af]'
                 )}
               >
                 <RedditLogoIcon weight="fill" size={20} />
@@ -125,7 +161,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-gray-400'
+                  'hover:border-[#9ca3af]'
                 )}
               >
                 <LinkedinWhiteLogo />
@@ -135,7 +171,7 @@ export const ContentSection = ({ post }: ContentProps) => {
         </div>
       </section>
       {post.excerpt && (
-        <div className="mt-6 rounded-lg border border-gray-700 bg-gray-800/50 p-4 lg:hidden">
+        <div className="mt-6 rounded-lg border border-[#36404c] bg-[#1d232a] p-4 lg:hidden">
           <span className="text-sm font-bold">TL;DR</span>
           <p className="text-sm">{post.excerpt}</p>
         </div>

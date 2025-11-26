@@ -13,7 +13,7 @@ export const RelatedNews = ({ posts, selectedPost }: RelatedNewsProps) => {
   return (
     <section className="mx-auto flex w-full max-w-5xl flex-col px-6 py-6 md:px-12 xl:px-0">
       <div>
-        <h3 className="text-sm text-gray-400">Related News</h3>
+        <h3 className="text-sm text-[#9ca3af]">Related News</h3>
         <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {relatedPosts.map((post, idx) => (
