@@ -27,10 +27,12 @@ export default async function BlogPage() {
       },
       sort: '-publishedAt',
       limit: 10,
+      overrideAccess: true,
     }),
     payload.find({
       collection: 'tags',
       limit: 100,
+      overrideAccess: true,
     }),
   ])
 

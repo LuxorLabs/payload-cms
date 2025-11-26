@@ -12,7 +12,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative w-full overflow-hidden border-t border-white/8 md:max-h-[400px]">
+    <footer className="relative w-full overflow-hidden border-t border-white/8 bg-[#000A15]/60 backdrop-blur-xs backdrop-filter md:max-h-[400px]">
       <FooterBackground />
       <div className="fade-overlay-top pointer-events-none absolute top-0 left-0 z-50 hidden h-28 w-full md:block" />
 

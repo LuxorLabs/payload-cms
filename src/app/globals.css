@@ -4,6 +4,20 @@
 
 @source "./src";
 
+@theme {
+  --color-primary: #d0d0d1;
+  --color-primary-foreground: #000000;
+  --color-muted-foreground: #a1a1aa;
+  --background: #000a14;
+  --foreground: #ffffff;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
+  --input: #27272a;
+  --accent: #1a1a1a;
+  --accent-foreground: #ffffff;
+}
+
 @layer base {
   html,
   body {

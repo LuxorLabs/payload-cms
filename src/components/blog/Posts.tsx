@@ -1,11 +1,14 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { XIcon } from '@phosphor-icons/react'
 import { isAfter, isBefore, isEqual } from 'date-fns'
-import { X } from 'lucide-react'
 import { BlogCard } from './BlogCard'
 import { Button } from '@/components/ui/button'
+import { NoResults } from '@/components/no-results'
+import { DatePickerRange, DateRange } from '@/components/ui/date-range'
 import { cn } from '@/lib/utils'
+import { useDebounce } from '@/utils/hooks/use-debounce'
 import type { Post, Tag } from '@/payload-types'
 
 type PostsProps = {
@@ -18,6 +21,7 @@ export const Posts = ({ posts, tags }: PostsProps) => {
     return tags.map((tag) => tag.name).filter(Boolean) as string[]
   }, [tags])
 
+  const [dateRange, setDateRange] = useState<DateRange>()
   const [filters, setFilters] = useState<Record<string, boolean>>(
     () => Object.fromEntries(tagNames.map((name) => [name, false])) as Record<string, boolean>,
   )
@@ -26,9 +30,12 @@ export const Posts = ({ posts, tags }: PostsProps) => {
     return Object.values(filters).filter(Boolean).length
   }, [filters])
 
+  const debouncedFilters = useDebounce(filters, 300)
+  const debouncedDateRange = useDebounce(dateRange, 300)
+
   const filteredPosts = useMemo(() => {
     let filteredData = posts
-    const enabledFilters = Object.keys(filters).filter((key) => filters[key])
+    const enabledFilters = Object.keys(debouncedFilters).filter((key) => debouncedFilters[key])
 
     if (enabledFilters.length !== 0) {
       filteredData = posts.filter((post: Post) => {
@@ -49,8 +56,27 @@ export const Posts = ({ posts, tags }: PostsProps) => {
       })
     }
 
+    if (debouncedDateRange?.from && debouncedDateRange?.to) {
+      const dateFrom = new Date(debouncedDateRange.from)
+      const dateTo = new Date(debouncedDateRange.to)
+      dateTo.setHours(23, 59, 59, 999)
+      return filteredData.filter((post: Post) => {
+        // Use createdAt as fallback (similar to Ghost's created_at)
+        const dateField = post.createdAt
+        if (!dateField) {
+          return false
+        }
+        const blogDate = new Date(dateField)
+
+        return (
+          (isAfter(blogDate, dateFrom) || isEqual(blogDate, dateFrom)) &&
+          (isBefore(blogDate, dateTo) || isEqual(blogDate, dateTo))
+        )
+      })
+    }
+
     return filteredData
-  }, [posts, filters])
+  }, [posts, debouncedFilters, debouncedDateRange])
 
   const resetFilters = () => {
     setFilters(Object.fromEntries(tagNames.map((name) => [name, false])))
@@ -64,9 +90,9 @@ export const Posts = ({ posts, tags }: PostsProps) => {
             <Button
               key={tag}
               className={cn(
-                'cursor-pointer !p-2.5 transition-colors duration-200 hover:border-gray-400',
+                'hover:border-cta-secondary-selected-border cursor-pointer h-9 !p-2.5 transition-colors duration-200',
                 filters[tag as string] &&
-                  'border-blue-500 bg-blue-500/20 hover:border-blue-400',
+                  'border-cta-secondary-selected-border bg-cta-secondary-interacted',
               )}
               variant={'secondary'}
               onClick={() => {
@@ -82,14 +108,20 @@ export const Posts = ({ posts, tags }: PostsProps) => {
           {appliedFiltersCount > 0 && (
             <Button
               variant="secondary"
-              className="cursor-pointer !p-2.5 transition-all duration-200 hover:border-gray-400"
+              className="hover:border-cta-secondary-selected-border cursor-pointer h-9 !p-2.5 transition-all duration-200"
               onClick={resetFilters}
             >
               {appliedFiltersCount} {appliedFiltersCount > 1 ? 'Filters' : 'Filter'} Applied
-              <X className="ml-1 h-4 w-4" />
+              <XIcon size={16} />
             </Button>
           )}
         </div>
+        <DatePickerRange
+          defaultMonth={dateRange?.from}
+          selected={dateRange}
+          onSelect={(range) => setDateRange(range)}
+          className="min-w-60"
+        />
       </div>
       {filteredPosts.length > 0 ? (
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -98,9 +130,7 @@ export const Posts = ({ posts, tags }: PostsProps) => {
           ))}
         </div>
       ) : (
-        <div className="mt-12 text-center">
-          <p className="text-lg text-gray-400">No posts found matching your filters.</p>
-        </div>
+        <NoResults />
       )}
     </section>
   )

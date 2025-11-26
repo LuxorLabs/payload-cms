@@ -9,7 +9,9 @@ export default async function BlogLayout(props: { children: React.ReactNode }) {
     <div className="flex min-h-screen flex-col">
       <Navigation />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <div className="flex flex-col justify-end lg:h-[500px]">
+        <Footer />
+      </div>
     </div>
   )
 }

@@ -16,13 +16,8 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      // Authenticated users (including API key auth) can read all posts
-      if (user) {
-        return true
-      }
-
-      // No authentication - deny access
-      return false
+      // Require authentication (session or API key) to read posts
+      return !!user
     },
     create: ({ req: { user } }) => {
       // Admin, Marketing, and Product can create posts

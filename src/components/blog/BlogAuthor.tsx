@@ -12,7 +12,7 @@ export const BlogAuthor = ({ author, datePublished }: BlogAuthorProps) => {
   // Handle case where author might be just an ID
   if (typeof author === 'number') {
     return (
-      <div className="flex items-center gap-1 text-sm text-white">
+      <div className="text-static-primary flex items-center gap-1 text-sm">
         <span>Author #{author}</span>
         <span className="size-0.5 bg-white" />
         <span>{format(new Date(datePublished), 'MMM dd, yyyy')}</span>
@@ -30,13 +30,13 @@ export const BlogAuthor = ({ author, datePublished }: BlogAuthorProps) => {
   }
 
   return (
-    <div className="flex items-center gap-1 text-sm text-white">
+    <div className="text-static-primary flex items-center gap-1 text-sm">
       <div className="relative size-5">
         <Image
           src={avatarUrl}
           fill
           alt={author.name}
-          className="size-5 rounded-full border border-gray-600"
+          className="border-static-profile size-5 rounded-full border"
         />
       </div>
       <span>{author.name}</span>

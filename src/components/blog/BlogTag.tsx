@@ -40,7 +40,7 @@ export const BlogTag = ({
   const tags = post?.tags
 
   const readTime = displayReadTime ? (
-    <span className={cn('text-sm text-gray-400', readTimeClassName)}>{readingTime(post)}</span>
+    <span className={cn('text-static-secondary text-sm', readTimeClassName)}>{readingTime(post)}</span>
   ) : null
 
   return tags ? (
@@ -57,7 +57,7 @@ export const BlogTag = ({
             <span
               key={`${tagName}-${idx}`}
               className={cn(
-                'flex h-7 items-center rounded-md border border-gray-700 bg-gray-800/50 px-2 py-1 text-sm text-gray-400',
+                'bg-badge-rest border-badge-rest-border text-static-secondary flex h-7 items-center rounded-md border px-2 py-1 text-sm',
               )}
             >
               {tagName}
@@ -67,7 +67,7 @@ export const BlogTag = ({
         {!displayAll && tags.length > 2 && (
           <span
             className={cn(
-              'flex h-7 items-center rounded-md border border-gray-700 bg-gray-800/50 px-2 py-1 text-sm text-gray-400',
+              'bg-badge-rest border-badge-rest-border text-static-secondary flex h-7 items-center rounded-md border px-2 py-1 text-sm',
             )}
           >
             {`+${tags.length - 2}`}
