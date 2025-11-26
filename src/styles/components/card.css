@@ -1,0 +1,15 @@
+@theme {
+  --color-basic-card-hovered: var(--color-layer-3);
+  --color-basic-card-rest: var(--color-layer-2);
+  --color-basic-card-selected-border: var(--color-brand-800-border);
+  --color-basic-card-primary-foreground: var(--color-neutral-0-foreground);
+  --color-basic-card-secondary-foreground: var(--color-neutral-900-foreground);
+}
+
+@theme {
+  --color-feature-card: var(--color-layer-2);
+  --color-feature-card-border: var(--color-neutral-1000-border);
+  --color-feature-card-description: var(--color-neutral-900);
+  --color-feature-card-icon: var(--color-layer-3);
+  --color-feature-card-title: var(--color-neutral-0);
+}

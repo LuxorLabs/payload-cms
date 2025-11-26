@@ -1,0 +1,9 @@
+@theme {
+  --color-static-icon-default: var(--color-neutral-0-foreground);
+  --color-static-profile: var(--color-layer-2);
+  --color-static-profile-foreground: var(--color-neutral-0-foreground);
+  --color-static-highlight: var(--color-brand-800-foreground);
+  --color-static-primary: var(--color-neutral-0-foreground);
+  --color-static-secondary: var(--color-neutral-900-foreground);
+  --color-static-success: var(--color-success-700);
+}

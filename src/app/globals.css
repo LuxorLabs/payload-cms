@@ -1,16 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --background: #000a14;
-  --foreground: #ffffff;
-  --muted: #27272a;
-  --muted-foreground: #a1a1aa;
-  --border: #27272a;
-  --accent: #1a1a1a;
-  --accent-foreground: #ffffff;
-}
+@import "../styles/styles.css";
+
+@source "./src";
 
 @layer base {
   html,

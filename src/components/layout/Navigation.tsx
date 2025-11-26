@@ -4,43 +4,42 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { GithubLogo } from '@/assets/svg/github-logo.svg'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { Logo } from '@/components/logo'
 
 const navItems = [
   { label: 'Overview', href: 'https://tenki.cloud' },
   { label: 'Pricing', href: 'https://tenki.cloud/pricing' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Docs', href: 'https://tenki.cloud/docs', external: true },
+  { label: 'Docs', href: 'https://tenki.cloud/docs' },
   { label: 'Careers', href: 'https://tenki.cloud/careers' },
 ]
 
 export const Navigation = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setScrolled(window.scrollY > 50)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const isNavItemActive = (href: string) => {
-    if (href === '/blog') {
-      return pathname?.startsWith('/blog')
-    }
-    return pathname === href
-  }
+  const isNavItemActive = (currentPath: string, href: string) =>
+    currentPath === href || (href !== '/' && currentPath.startsWith(href))
 
   return (
     <header className="flex w-full justify-center">
       <nav
         className={cn(
-          'fixed z-[999] w-full transition-all duration-300 ease-in-out',
-          isScrolled && 'md:rounded-xl md:border md:border-[#1D232A] lg:mt-8 xl:w-[1200px]',
+          'fixed z-[999] w-full border-[#1D232A] transition-all duration-300 ease-in-out',
+          scrolled && 'md:rounded-xl md:border lg:mt-8 xl:w-[1200px]',
         )}
         style={{
           background:
@@ -49,40 +48,40 @@ export const Navigation = () => {
         }}
       >
         <div
-          className="absolute bottom-0 left-0 right-0 h-[1px] w-full"
+          className="absolute right-0 bottom-0 left-0 h-[1px] w-full"
           style={{
             background: 'linear-gradient(to right, rgba(0,10,21,0), #1D232A, rgba(0,10,21,0))',
           }}
         />
         <div className="relative mx-auto flex max-w-[1200px] items-center justify-between px-6 py-3 transition-all duration-300 lg:gap-0 lg:py-4">
-          {/* Logo */}
           <div className="flex items-center justify-between lg:min-w-44">
             <Link href="/blog" aria-label="home" className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-white">Tenki</span>
+              <Logo />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <ul className="mx-auto hidden divide-x divide-solid divide-white/[4%] rounded-lg border border-white/[4%] p-1 lg:flex">
+          <ul
+            key={scrolled ? 'scrolled-nav-list' : 'default-nav-list'}
+            className="mx-auto hidden divide-x divide-solid divide-white/[4%] rounded-lg border border-white/[4%] p-1 lg:flex"
+          >
             {navItems.map((item, idx) => {
-              const isActive = isNavItemActive(item.href)
+              const isActive = isNavItemActive(pathname, item.href)
+              const showBackground = hoveredIndex === idx || (hoveredIndex === null && isActive)
+
               return (
                 <li
                   key={`nav-desktop-${idx}`}
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   className={cn(
-                    'relative inline-block border-0 px-3 py-1 text-sm text-gray-400 transition-all duration-200',
-                    isActive && 'text-white',
+                    'text-static-secondary relative inline-block border-0 px-3 py-1 text-sm transition-all duration-200',
+                    isActive && 'text-static-primary',
                   )}
                 >
-                  {isActive && (
-                    <span className="absolute inset-0 -z-10 size-full rounded-[4px] bg-[#1a1a1a]" />
+                  {showBackground && (
+                    <span className="bg-layer-3 absolute inset-0 -z-10 size-full rounded-[4px]" />
                   )}
-                  <Link
-                    href={item.href}
-                    className="relative"
-                    target={item.external ? '_blank' : undefined}
-                    rel={item.external ? 'noopener noreferrer' : undefined}
-                  >
+                  <Link href={item.href} className="relative">
                     {item.label}
                   </Link>
                 </li>
@@ -90,11 +89,13 @@ export const Navigation = () => {
             })}
           </ul>
 
-          {/* CTA Buttons */}
           <div className="flex items-center gap-2">
             <Link
               className={cn(
-                'hidden text-sm text-white transition-colors hover:text-gray-300 lg:block',
+                buttonVariants({
+                  size: 'sm',
+                  variant: 'ghost',
+                }),
               )}
               href="https://app.tenki.cloud/auth/login"
               target="_blank"
@@ -102,45 +103,42 @@ export const Navigation = () => {
               Login
             </Link>
             <Link
-              className={cn(
-                'hidden rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-700 lg:block',
-              )}
+              className={cn(buttonVariants({ size: 'sm' }))}
               href="https://app.tenki.cloud/auth/registration"
               target="_blank"
             >
-              Sign Up
+              <GithubLogo /> Sign Up
             </Link>
-
-            {/* Mobile Menu Button */}
             <Button
+              aria-label={isSheetOpen ? 'Close Menu' : 'Open Menu'}
               variant="ghost"
-              className="flex size-10 items-center justify-center lg:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="relative flex size-10 items-center justify-center lg:hidden"
+              onClick={() => setIsSheetOpen(!isSheetOpen)}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isSheetOpen ? <X /> : <Menu />}
             </Button>
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
+        {isSheetOpen && (
           <div className="border-t border-white/[8%] bg-[#000D1B]/90 backdrop-blur-sm lg:hidden">
             <ul className="divide-y divide-solid divide-white/[8%]">
               {navItems.map((item, idx) => {
-                const isActive = isNavItemActive(item.href)
+                const isActive = isNavItemActive(pathname, item.href)
                 return (
                   <li
                     key={`nav-mobile-${idx}`}
                     className={cn(
-                      'px-4 py-4 text-lg text-gray-400',
+                      'text-static-secondary px-4 py-4 text-lg',
                       isActive && 'font-bold text-white',
                     )}
                   >
                     <Link
                       href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      target={item.external ? '_blank' : undefined}
-                      rel={item.external ? 'noopener noreferrer' : undefined}
+                      onClick={() => {
+                        setIsSheetOpen(false)
+                      }}
                     >
                       {item.label}
                     </Link>

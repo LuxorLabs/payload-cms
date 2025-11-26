@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { Check, Link as LinkIcon, Share2 } from 'lucide-react'
+import { CheckIcon, LinkIcon, RedditLogoIcon, XLogoIcon } from '@phosphor-icons/react'
 import { useState, useMemo } from 'react'
 import Image from 'next/image'
+import LinkedinWhiteLogo from '@/assets/svg/linkedin-white-logo.svg'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { RichText } from './RichText'
@@ -65,9 +66,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                       target="_blank"
                       className="ml-2 inline-block"
                     >
-                      <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
+                      <XLogoIcon size={12} />
                     </Link>
                   )}
                 </div>
@@ -90,33 +89,47 @@ export const ContentSection = ({ post }: ContentProps) => {
                 variant="secondary"
                 size="icon"
               >
-                {copied ? <Check className="h-5 w-5" /> : <LinkIcon className="h-5 w-5" />}
+                {copied ? <CheckIcon size={20} /> : <LinkIcon size={20} />}
               </Button>
-              <Button
-                onClick={() => {
-                  window.open(`https://x.com/compose/post?text=${window.location.href}`, '_blank')
-                }}
-                className="cursor-pointer hover:border-gray-400"
-                variant="secondary"
-                size="icon"
+              <Link
+                href={`https://x.com/compose/post?text=${window.location.href}`}
+                target="_blank"
+                className={cn(
+                  buttonVariants({
+                    variant: 'secondary',
+                    size: 'icon',
+                  }),
+                  'hover:border-gray-400'
+                )}
               >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </Button>
-              <Button
-                onClick={() => {
-                  window.open(
-                    `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post?.title ?? 'Tenki Blog')}`,
-                    '_blank'
-                  )
-                }}
-                className="cursor-pointer hover:border-gray-400"
-                variant="secondary"
-                size="icon"
+                <XLogoIcon size={20} />
+              </Link>
+              <Link
+                href={`https://www.reddit.com/submit?url=${window.location.href}&title=${post.title}`}
+                target="_blank"
+                className={cn(
+                  buttonVariants({
+                    variant: 'secondary',
+                    size: 'icon',
+                  }),
+                  'hover:border-gray-400'
+                )}
               >
-                <Share2 className="h-5 w-5" />
-              </Button>
+                <RedditLogoIcon weight="fill" size={20} />
+              </Link>
+              <Link
+                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post?.title ?? 'Tenki Cloud')}`}
+                target="_blank"
+                className={cn(
+                  buttonVariants({
+                    variant: 'secondary',
+                    size: 'icon',
+                  }),
+                  'hover:border-gray-400'
+                )}
+              >
+                <LinkedinWhiteLogo />
+              </Link>
             </div>
           </div>
         </div>

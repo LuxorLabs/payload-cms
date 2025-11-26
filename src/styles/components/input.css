@@ -1,0 +1,11 @@
+@theme {
+  --color-input-controls: var(--color-layer-2);
+  --color-input-controls-selected: var(--color-brand-700);
+  --color-input-controls-border: var(--color-neutral-1000-border);
+  --color-input-controls-hovered-border: var(--color-neutral-900-border);
+  --color-input-controls-selected-border: var(--color-neutral-0-border);
+  --color-input-controls-error: var(--color-error-1000-foreground);
+  --color-input-controls-primary: var(--color-neutral-0-foreground);
+  --color-input-controls-secondary: var(--color-neutral-900-foreground);
+  --color-input-controls-tertiary: var(--color-neutral-800-foreground);
+}

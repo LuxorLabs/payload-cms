@@ -1,0 +1,6 @@
+@theme {
+  --color-tabs-rest-border: var(--color-neutral-1000-border);
+  --color-tabs-selected-border: var(--color-neutral-0-border);
+  --color-tabs-rest-foreground: var(--color-neutral-900-foreground);
+  --color-tabs-selected-foreground: var(--color-neutral-0-foreground);
+}

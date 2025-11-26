@@ -1,0 +1,29 @@
+@theme {
+  --color-badge-hovered: var(--color-layer-3);
+  --color-badge-rest: var(--color-layer-2);
+  --color-badge-hovered-border: var(--color-neutral-900-border);
+  --color-badge-rest-border: var(--color-neutral-1000-border);
+  --color-badge-foreground: var(--color-neutral-0-forground);
+}
+
+@theme {
+  --color-sticker-active: var(--color-brand-200);
+  --color-sticker-active-border: var(--color-brand-800-border);
+  --color-sticker-failure: var(--color-error-500);
+  --color-sticker-icon: var(--color-neutral-0-foreground);
+  --color-sticker-inactive: var(--color-neutral-0);
+  --color-sticker-inactive-border: var(--color-neutral-900-border);
+  --color-sticker-information: var(--color-brand-300);
+  --color-sticker-neutral: var(--color-neutral-700);
+  --color-sticker-notice: var(--status-negative-foreground);
+  --color-sticker-success: var(--color-success-700);
+}
+
+@theme {
+  --color-status-inactive: var(--color-neutral-800);
+  --color-status-inactive-foreground: var(--color-neutral-0);
+  --color-status-negative: var(--color-warning-900);
+  --color-status-negative-foreground: var(--color-warning-700);
+  --color-status-positive: var(--color-success-900);
+  --color-status-positive-foreground: var(--color-success-900-foreground);
+}

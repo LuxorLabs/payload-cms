@@ -1,0 +1,6 @@
+@theme {
+  --color-progress-bar: var(--color-layer-2);
+  --color-progress-bar-indicator-grad-bottom: var(--color-brand-400);
+  --color-progress-bar-indicator-grad-top: var(--color-brand-300);
+  --color-progress-bar-knob: var(--color-neutral-0);
+}

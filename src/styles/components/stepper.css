@@ -1,0 +1,10 @@
+@theme {
+  --color-stepper-active-step-foreground: var(--color-neutral-0-foreground);
+  --color-stepper-active-step-icon: var(--color-neutral-0);
+  --color-stepper-active-step-icon-foreground: var(--color-neutral-1000-foreground);
+  --color-stepper-container-active: var(--color-layer-4);
+  --color-stepper-container-rest: var(--color-layer-2);
+  --color-stepper-container-border: var(--color-neutral-1000-border);
+  --color-stepper-inactive-step-icon: var(--color-neutral-600);
+  --color-stepper-inactive-step-icon-foreground: var(--color-neutral-1000-foreground);
+}

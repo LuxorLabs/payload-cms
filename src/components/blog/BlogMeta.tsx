@@ -32,7 +32,7 @@ function readingTime(post: Post): string {
   return `${minutes} min read`
 }
 
-const BLOG_DEFAULT_IMG = '/images/blog-default.jpg'
+const BLOG_DEFAULT_IMG = '/images/tenki-blog.png'
 
 export const BlogMeta = ({ post }: BlogMetaProps) => {
   const [copied, setCopied] = useState(false)

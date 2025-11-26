@@ -1,0 +1,31 @@
+@theme {
+  --color-connector-primary: var(--color-brand-300);
+  --color-connector-secondary: var(--color-neutral-1000-border);
+  --color-dynamic-img: var(--color-brand-1000);
+  --color-dynamic-img-cube-side: var(--color-brand-600);
+  --color-dynamic-img-cube-top: var(--color-brand-700);
+  --color-dynamic-img-cube-top-activated: var(--color-brand-300);
+  --color-effects-blur-default: var(--color-brand-300);
+  --color-effects-blur-subtle: var(--color-brand-400);
+  --color-effects-inner-frost: --alpha(var(--color-white) / 20%);
+  --color-effects-shadow: --alpha(var(--color-bluish-gray-1000) / 80%);
+  --color-indicator-dots-active: var(--color-brand-300);
+  --color-indicator-dots-inactive: var(--color-layer-4);
+  --color-logo-glyph: var(--color-layer-1);
+  --color-logo-glyph-side: var(--color-brand-800-foreground);
+  --color-logo-glyph-top: var(--color-brand-1000-foreground);
+  --color-logo-wordmark-foreground: var(--color-neutral-0-foreground);
+  --color-notification: var(--color-layer-1);
+  --color-notification-hovered: var(--color-bluish-gray-800);
+  --color-notification-foreground: var(--color-neutral-0-foreground);
+  --color-notification-time-stamp: var(--color-neutral-900-foreground);
+  --color-page-counter: var(--color-neutral-0);
+  --color-page-counter-current: var(--color-neutral-0-foreground);
+  --color-page-counter-maximum: var(--color-neutral-900-foreground);
+  --color-qr-code: var(--color-neutral-0);
+  --color-qr-code-code: var(--color-layer-base);
+  --color-scroll-bar-default: var(--color-neutral-900-foreground);
+  --color-scroll-bar-interacted: var(--color-neutral-0-foreground);
+  --color-tooltip: var(--color-brand-700);
+  --color-tooltip-foreground: var(--color-neutral-0-foreground);
+}
