@@ -1,0 +1,47 @@
+import { format } from 'date-fns'
+import Image from 'next/image'
+import { cn } from '@/lib/utils'
+import type { Author, Media } from '@/payload-types'
+
+type BlogAuthorProps = {
+  author: number | Author
+  datePublished: string
+}
+
+export const BlogAuthor = ({ author, datePublished }: BlogAuthorProps) => {
+  // Handle case where author might be just an ID
+  if (typeof author === 'number') {
+    return (
+      <div className="flex items-center gap-1 text-sm text-white">
+        <span>Author #{author}</span>
+        <span className="size-0.5 bg-white" />
+        <span>{format(new Date(datePublished), 'MMM dd, yyyy')}</span>
+      </div>
+    )
+  }
+
+  // Get author avatar URL
+  let avatarUrl = '/images/favicon-default.png'
+  if (author.avatar) {
+    const avatar = typeof author.avatar === 'number' ? null : (author.avatar as Media)
+    if (avatar?.url) {
+      avatarUrl = avatar.url.startsWith('http') ? avatar.url : avatar.url
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-1 text-sm text-white">
+      <div className="relative size-5">
+        <Image
+          src={avatarUrl}
+          fill
+          alt={author.name}
+          className="size-5 rounded-full border border-gray-600"
+        />
+      </div>
+      <span>{author.name}</span>
+      <span className="size-0.5 bg-white" />
+      <span>{format(new Date(datePublished), 'MMM dd, yyyy')}</span>
+    </div>
+  )
+}
