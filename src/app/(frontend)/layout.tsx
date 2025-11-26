@@ -12,8 +12,8 @@ export default async function RootLayout(props: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <body>
-        <main>{children}</main>
+      <body className="flex min-h-screen flex-col scroll-smooth bg-[#000A15]">
+        {children}
       </body>
     </html>
   )
