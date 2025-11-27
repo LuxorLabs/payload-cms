@@ -24,4 +24,7 @@
 			"binding": "R2"
 		}
 	],
+	"vars": {
+		"R2_PUBLIC_URL": "https://pub-a6d3a947a939445a9c28d0145ee1ebb9.r2.dev"
+	}
 }
