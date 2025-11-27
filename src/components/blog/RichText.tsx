@@ -35,6 +35,20 @@ function serializeLexical(node: any): React.ReactNode {
     return node.map((child, i) => <React.Fragment key={i}>{serializeLexical(child)}</React.Fragment>)
   }
 
+  // Handle block nodes without children (like code blocks)
+  if (node.type === 'block') {
+    if (node.fields?.blockType === 'Code') {
+      const code = node.fields?.code || ''
+      const language = node.fields?.language || ''
+      return (
+        <pre className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+          <code className={language ? `language-${language}` : ''}>{code}</code>
+        </pre>
+      )
+    }
+    return null
+  }
+
   // Handle children array
   if (node.children) {
     const children = serializeLexical(node.children)
@@ -90,6 +104,9 @@ function serializeLexical(node: any): React.ReactNode {
         return node.headerState ? <th>{children}</th> : <td>{children}</td>
       case 'horizontalrule':
         return <hr />
+      case 'block':
+        // This should not be reached since blocks are handled earlier
+        return <div>{children}</div>
       default:
         return <div>{children}</div>
     }

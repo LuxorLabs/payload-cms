@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { CheckIcon, LinkIcon, RedditLogoIcon, XLogoIcon } from '@phosphor-icons/react'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import LinkedinWhiteLogo from '@/assets/svg/linkedin-white-logo.svg'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -18,6 +18,11 @@ type ContentProps = {
 
 export const ContentSection = ({ post }: ContentProps) => {
   const [copied, setCopied] = useState(false)
+  const [currentUrl, setCurrentUrl] = useState('')
+
+  useEffect(() => {
+    setCurrentUrl(window.location.href)
+  }, [])
 
   if (!post.content) {
     return null
@@ -116,7 +121,7 @@ export const ContentSection = ({ post }: ContentProps) => {
             <div className="mt-2.5 flex gap-2">
               <Button
                 onClick={() => {
-                  navigator.clipboard.writeText(window.location.href).then(() => {
+                  navigator.clipboard.writeText(currentUrl).then(() => {
                     setCopied(true)
                     setTimeout(() => setCopied(false), 3000)
                   })
@@ -128,7 +133,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                 {copied ? <CheckIcon size={20} /> : <LinkIcon size={20} />}
               </Button>
               <Link
-                href={`https://x.com/compose/post?text=${window.location.href}`}
+                href={`https://x.com/compose/post?text=${currentUrl}`}
                 target="_blank"
                 className={cn(
                   buttonVariants({
@@ -141,7 +146,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                 <XLogoIcon size={20} />
               </Link>
               <Link
-                href={`https://www.reddit.com/submit?url=${window.location.href}&title=${post.title}`}
+                href={`https://www.reddit.com/submit?url=${currentUrl}&title=${post.title}`}
                 target="_blank"
                 className={cn(
                   buttonVariants({
@@ -154,7 +159,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                 <RedditLogoIcon weight="fill" size={20} />
               </Link>
               <Link
-                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(post?.title ?? 'Tenki Cloud')}`}
+                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post?.title ?? 'Tenki Cloud')}`}
                 target="_blank"
                 className={cn(
                   buttonVariants({

@@ -78,13 +78,13 @@ export function Footer() {
                 <Link href="https://x.com/tenkicloud">X (Twitter)</Link>
               </li>
               <li>
-                <Link href="https://www.linkedin.com/company/tenki">LinkedIn</Link>
+                <Link href="https://www.linkedin.com/company/tenki-cloud/about">LinkedIn</Link>
               </li>
               <li>
                 <Link href="https://discord.gg/qNFaWrR6um">Discord</Link>
               </li>
               <li>
-                <Link href="https://www.producthunt.com/posts/tenki">Product Hunt</Link>
+                <Link href="https://www.producthunt.com/posts/tenki-cloud?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-tenki&#0045;cloud">Product Hunt</Link>
               </li>
               <li>
                 <Link href="https://www.uneed.best/blog/tenki-review">Uneed</Link>
