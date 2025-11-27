@@ -1,0 +1,40 @@
+@theme {
+  --color-widget-card-primary: var(--color-neutral-0-foreground);
+  --color-widget-card-secondary: var(--color-neutral-900-foreground);
+
+  --color-widget-container: var(--color-layer-1);
+  --color-widget-container-border: var(--color-neutral-1000-border);
+
+  --color-widget-plots-grid-hover-marker: var(--color-neutral-0-border);
+  --color-widget-plots-grid-label: var(--color-neutral-900-foreground);
+  --color-widget-plots-grid-lines: var(--color-neutral-900-border);
+  --color-widget-plots-stack-bar-1: var(--color-visualization-1);
+  --color-widget-plots-stack-bar-2: var(--color-visualization-2);
+  --color-widget-plots-stack-bar-3: var(--color-visualization-3);
+  --color-widget-plots-stack-bar-4: var(--color-visualization-4);
+  --color-widget-plots-stack-bar-5: var(--color-visualization-5);
+  --color-widget-plots-stack-bar-6: var(--color-visualization-6);
+  --color-widget-plots-stack-bar-7: var(--color-visualization-7);
+  --color-widget-plots-stack-bar-8: var(--color-visualization-8);
+  --color-widget-plots-tooltip: var(--color-layer-2);
+  --color-widget-plots-tooltip-border: var(--color-neutral-1000-border);
+  --color-widget-plots-tooltip-primary: var(--color-neutral-0-foreground);
+  --color-widget-plots-tooltip-secondary: var(--color-neutral-900-foreground);
+
+  --color-widget-skeleton-grad-left: var(--color-bluish-gray-1000);
+  --color-widget-skeleton-grad-right: var(--color-bluish-gray-900);
+
+  --color-widget-table: var(--color-layer-1);
+  --color-widget-table-border: var(--color-neutral-1000-border);
+  --color-widget-table-cell-primary: var(--color-neutral-0-foreground);
+  --color-widget-table-cell-secondary: var(--color-neutral-900-foreground);
+  --color-widget-table-column-label: var(--color-neutral-900-foreground);
+  --color-widget-table-pagination-text: var(--color-neutral-900-foreground);
+  --color-widget-table-row-hover: var(--color-layer-3);
+  --color-widget-table-row-selected: var(--color-layer-2);
+  --color-widget-table-subtitle: var(--color-neutral-900-foreground);
+  --color-widget-table-title: var(--color-neutral-0-foreground);
+
+  --color-widget-radical-grad-center: var(--color-bluish-gray-900);
+  --color-widget-radical-grad-bottom: var(--color-bluish-gray-1000);
+}

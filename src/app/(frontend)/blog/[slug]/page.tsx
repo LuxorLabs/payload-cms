@@ -2,19 +2,19 @@ import React from 'react'
 import { getPayload } from 'payload'
 import config from '@/payload.config'
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Calendar, Clock, ArrowLeft } from 'lucide-react'
-import { formatDate } from '@/lib/utils'
-import type { Post, Category, Author, Media, Tag } from '@/payload-types'
-import { RichText } from '@/components/blog/RichText'
+import { ContentSection } from '@/components/blog/ContentSection'
+import { RelatedNews } from '@/components/blog/RelatedNews'
+import { Introduction } from '@/components/blog/Introduction'
+import { BlogMeta } from '@/components/blog/BlogMeta'
+import type { Post, Category, Media } from '@/payload-types'
 
 interface BlogPostPageProps {
   params: Promise<{
     slug: string
   }>
 }
+
+export const dynamic = 'force-static'
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { slug } = await params
@@ -80,158 +80,64 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound()
   }
 
-  const category = post.category as Category
-  const author = post.author as Author
-  const featuredImage = post.featuredImage as Media
-  const tags = (post.tags as Tag[]) || []
+  // Extract tag IDs and category ID for related posts
+  const tagIds = post.tags
+    ? (post.tags as any[])
+        .map((tag) => (typeof tag === 'number' ? tag : tag.id))
+        .filter(Boolean)
+    : []
+
+  const categoryId =
+    typeof post.category === 'number' ? post.category : (post.category as Category)?.id
+
+  // Fetch related posts
+  const relatedPostsQuery = await payload.find({
+    collection: 'posts',
+    where: {
+      and: [
+        {
+          id: {
+            not_equals: post.id,
+          },
+        },
+        {
+          status: {
+            equals: 'published',
+          },
+        },
+        {
+          or: [
+            categoryId
+              ? {
+                  category: {
+                    equals: categoryId,
+                  },
+                }
+              : {},
+            tagIds.length > 0
+              ? {
+                  tags: {
+                    in: tagIds,
+                  },
+                }
+              : {},
+          ],
+        },
+      ],
+    },
+    limit: 4,
+    depth: 2,
+  })
+
+  const relatedPosts = relatedPostsQuery.docs as Post[]
 
   return (
-    <article className="container mx-auto px-4 py-12">
-      <Link
-        href="/blog"
-        className="mb-8 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Blog
-      </Link>
-
-      <header className="mb-8">
-        {category && (
-          <Badge
-            variant="secondary"
-            style={{ backgroundColor: category.color || '#3B82F6' }}
-            className="mb-4 text-white"
-          >
-            {category.name}
-          </Badge>
-        )}
-
-        <h1 className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">{post.title}</h1>
-
-        <p className="mb-6 text-xl text-muted-foreground">{post.excerpt}</p>
-
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          {author && (
-            <div className="flex items-center gap-2">
-              {author.avatar && typeof author.avatar === 'object' && author.avatar.url && (
-                <Image
-                  src={author.avatar.url}
-                  alt={author.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              )}
-              <div>
-                <p className="font-medium text-foreground">{author.name}</p>
-                {author.role && <p className="text-xs capitalize">{author.role}</p>}
-              </div>
-            </div>
-          )}
-
-          <div className="flex items-center gap-4">
-            {post.publishedAt && (
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(post.publishedAt)}</span>
-              </div>
-            )}
-            {post.readingTime && (
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                <span>{post.readingTime} min read</span>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {featuredImage?.url && (
-        <div className="relative mb-12 aspect-video w-full overflow-hidden rounded-lg">
-          <Image
-            src={featuredImage.url}
-            alt={featuredImage.alt || post.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 1200px) 100vw, 1200px"
-          />
-        </div>
-      )}
-
-      <div className="prose prose-lg mx-auto max-w-4xl dark:prose-invert">
-        <RichText content={post.content} />
-      </div>
-
-      {tags.length > 0 && (
-        <footer className="mx-auto mt-12 max-w-4xl border-t pt-8">
-          <div className="flex flex-wrap gap-2">
-            <span className="text-sm font-medium text-muted-foreground">Tags:</span>
-            {tags.map((tag) => (
-              <Link key={tag.id} href={`/blog/tag/${tag.slug}`}>
-                <Badge variant="outline" className="hover:bg-accent">
-                  {tag.name}
-                </Badge>
-              </Link>
-            ))}
-          </div>
-        </footer>
-      )}
-
-      {author && author.bio && (
-        <div className="mx-auto mt-12 max-w-4xl rounded-lg border p-6">
-          <div className="flex items-start gap-4">
-            {author.avatar && typeof author.avatar === 'object' && author.avatar.url && (
-              <Image
-                src={author.avatar.url}
-                alt={author.name}
-                width={80}
-                height={80}
-                className="rounded-full"
-              />
-            )}
-            <div>
-              <h3 className="mb-2 text-lg font-semibold">About {author.name}</h3>
-              <p className="text-muted-foreground">{author.bio}</p>
-              {author.socialLinks && (
-                <div className="mt-4 flex gap-4 text-sm">
-                  {author.socialLinks.twitter && (
-                    <a
-                      href={author.socialLinks.twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      Twitter
-                    </a>
-                  )}
-                  {author.socialLinks.linkedin && (
-                    <a
-                      href={author.socialLinks.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      LinkedIn
-                    </a>
-                  )}
-                  {author.socialLinks.github && (
-                    <a
-                      href={author.socialLinks.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      GitHub
-                    </a>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </article>
+    <>
+      <Introduction />
+      <BlogMeta post={post} />
+      <ContentSection post={post} />
+      <RelatedNews posts={relatedPosts} selectedPost={post} />
+    </>
   )
 }
 

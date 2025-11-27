@@ -1,0 +1,17 @@
+@theme {
+  --color-banner-input: var(--color-neutral-800);
+  --color-banner-input-border: var(--color-neutral-900-border);
+  --color-banner-input-foreground: var(--color-neutral-0-foreground);
+
+  --color-banner: var(--color-bluish-gray-600);
+  --color-banner-border: var(--color-bluish-gray-400);
+  --color-banner-danger: var(--color-red-700);
+  --color-banner-danger-border: var(--color-red-600);
+  --color-banner-danger-foreground: var(--color-neutral-0-foreground);
+  --color-banner-info: #013;
+  --color-banner-info-border: var(--color-blue-600);
+  --color-banner-success: #142b2a;
+  --color-banner-success-border: var(--color-green-600);
+  --color-banner-warning: var(--color-orange-1000);
+  --color-banner-warning-border: var(--color-orange-900);
+}

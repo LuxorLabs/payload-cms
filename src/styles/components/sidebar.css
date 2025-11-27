@@ -1,0 +1,10 @@
+@theme {
+  --color-sidebar: #000a14;
+  --color-sidebar-foreground: #f4f4f5;
+  --color-sidebar-primary: #1d4dd7;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #27272a;
+  --color-sidebar-accent-foreground: #f4f4f5;
+  --color-sidebar-border: #27272a;
+  --color-sidebar-ring: #3b82f5;
+}

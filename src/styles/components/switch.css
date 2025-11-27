@@ -1,0 +1,5 @@
+@theme {
+  --color-switch-off: var(--color-layer-3);
+  --color-switch-knob-off: var(--color-neutral-600);
+  --color-switch-knob-on: var(--color-neutral-0);
+}

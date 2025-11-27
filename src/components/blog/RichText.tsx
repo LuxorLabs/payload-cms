@@ -4,6 +4,24 @@ interface RichTextProps {
   content: any
 }
 
+function extractTextFromNode(node: any): string {
+  if (!node) return ''
+
+  if (Array.isArray(node)) {
+    return node.map((child) => extractTextFromNode(child)).join('')
+  }
+
+  if (node.type === 'text') {
+    return node.text || ''
+  }
+
+  if (node.children) {
+    return extractTextFromNode(node.children)
+  }
+
+  return ''
+}
+
 function serializeLexical(node: any): React.ReactNode {
   if (!node) return null
 
@@ -17,6 +35,20 @@ function serializeLexical(node: any): React.ReactNode {
     return node.map((child, i) => <React.Fragment key={i}>{serializeLexical(child)}</React.Fragment>)
   }
 
+  // Handle block nodes without children (like code blocks)
+  if (node.type === 'block') {
+    if (node.fields?.blockType === 'Code') {
+      const code = node.fields?.code || ''
+      const language = node.fields?.language || ''
+      return (
+        <pre className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+          <code className={language ? `language-${language}` : ''}>{code}</code>
+        </pre>
+      )
+    }
+    return null
+  }
+
   // Handle children array
   if (node.children) {
     const children = serializeLexical(node.children)
@@ -28,8 +60,18 @@ function serializeLexical(node: any): React.ReactNode {
       case 'paragraph':
         return <p>{children}</p>
       case 'heading':
-        const HeadingTag = `h${node.tag}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
-        return <HeadingTag>{children}</HeadingTag>
+        const HeadingTag = node.tag as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+        // Generate ID from heading text
+        const headingText = extractTextFromNode(node)
+        const headingId = headingText
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]/g, '')
+        return (
+          <HeadingTag id={headingId} className="scroll-mt-30">
+            {children}
+          </HeadingTag>
+        )
       case 'list':
         return node.listType === 'number' ? <ol>{children}</ol> : <ul>{children}</ul>
       case 'listitem':
@@ -42,6 +84,29 @@ function serializeLexical(node: any): React.ReactNode {
             {children}
           </a>
         )
+      case 'code':
+        return (
+          <pre>
+            <code className={node.language ? `language-${node.language}` : ''}>
+              {children}
+            </code>
+          </pre>
+        )
+      case 'table':
+        return (
+          <table>
+            <tbody>{children}</tbody>
+          </table>
+        )
+      case 'tablerow':
+        return <tr>{children}</tr>
+      case 'tablecell':
+        return node.headerState ? <th>{children}</th> : <td>{children}</td>
+      case 'horizontalrule':
+        return <hr />
+      case 'block':
+        // This should not be reached since blocks are handled earlier
+        return <div>{children}</div>
       default:
         return <div>{children}</div>
     }

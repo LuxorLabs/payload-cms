@@ -71,16 +71,16 @@ pnpm payload migrate:create
 
 ```bash
 # Create D1 database
-pnpm wrangler d1 create my-app
+pnpm wrangler d1 create tenki-blog
 
 # Create R2 bucket
-pnpm wrangler r2 bucket create my-app
+pnpm wrangler r2 bucket create tenki-blog
 ```
 
 Note: whether you want local dev to conenct to deployed cf resources is up to you...it doesn't matter which you choose we can change it anytime anyways
 
 ### 5. Update wrangler.jsonc (POSSIBLY OPTIONAL)
-This step could be optional if you said Yes from "Would you like Wrangler to add it on your behalf? … yes" after you ran "pnpm wrangler {d1 or r2 bucket} create my-app"
+This step could be optional if you said Yes from "Would you like Wrangler to add it on your behalf? … yes" after you ran "pnpm wrangler {d1 or r2 bucket} create tenki-blog"
 
 Copy the `database_id` from the D1 creation output and update `wrangler.jsonc`:
 
@@ -88,8 +88,8 @@ Copy the `database_id` from the D1 creation output and update `wrangler.jsonc`:
 "d1_databases": [
   {
     "binding": "D1",
-    "database_id": "YOUR_DATABASE_ID_HERE",  // <-- hould be different from other cf resources bindings
-    "database_name": "my-app",
+    "database_id": "YOUR_DATABASE_ID_HERE",  // <-- should be different from other cf resources bindings
+    "database_name": "tenki-blog",
     "remote": true
   }
 ]
@@ -98,7 +98,7 @@ Copy the `database_id` from the D1 creation output and update `wrangler.jsonc`:
 "r2_buckets": [
   {
     "binding": "R2",   // <-- Should be different from other cf resources bindings
-    "bucket_name": "my-app",
+    "bucket_name": "tenki-blog",
   }
 ]
 ```
@@ -106,8 +106,15 @@ Copy the `database_id` from the D1 creation output and update `wrangler.jsonc`:
 ### 6. Set PAYLOAD_SECRET
 
 ```bash
-openssl rand -base64 32 | pnpm wrangler secret put PAYLOAD_SECRET
+NEW_SECRET=$(openssl rand -base64 32)
+echo $NEW_SECRET
 ```
+
+```bash
+echo $NEW_SECRET | pnpm wrangler secret put PAYLOAD_SECRET
+```
+
+then update your github actions secret, and .env "PAYLOAD_SECRET" 
 
 ### 7. Deploy
 
@@ -120,7 +127,10 @@ This will:
 2. Build the Next.js app with OpenNext
 3. Deploy to Cloudflare Workers
 
-Your app will be available at: `https://my-app.<your-subdomain>.workers.dev`
+Your app will be available at: `https://tenki-blog.<your-subdomain>.workers.dev`
+
+## [TODO] Data schema not getting migrated to D1 Database 
+-> in our conversation with claude it created migration.sql and executed it in d1. use that file  
 
 ## Connecting Local Dev to Remote Cloudflare Resources
 
@@ -166,7 +176,7 @@ CLOUDFLARE_ENV=staging pnpm run deploy
 | `pnpm payload migrate` | Run migrations |
 | `pnpm payload migrate:create` | Create new migration |
 | `pnpm wrangler login` | Authenticate with Cloudflare |
-| `pnpm wrangler d1 execute my-app --remote --command "SELECT * FROM users"` | Query remote D1 |
+| `pnpm wrangler d1 execute tenki-blog --remote --command "SELECT * FROM users"` | Query remote D1 |
 
 ## Troubleshooting
 

@@ -1,0 +1,11 @@
+@theme {
+  --color-checkbox-hovered: var(--color-neutral-800);
+  --color-checkbox-rest: var(--color-layer-1);
+  --color-checkbox-border: var(--color-neutral-0-border);
+  --color-checkbox-icon-selected: var(--color-neutral-0-foreground);
+  --color-checkbox-icon-unselected: var(--color-neutral-0);
+  --color-checkbox-icon-selected: var(--color-layer-base);
+  --color-checkbox-icon-unselected: var(--color-neutral-0);
+  --color-checkbox-text-primary: var(--color-neutral-0-foreground);
+  --color-checkbox-text-secondary: var(--color-neutral-900-foreground);
+}

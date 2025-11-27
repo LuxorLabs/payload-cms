@@ -1,0 +1,42 @@
+@theme {
+  --color-toast-failure: var(--color-error-700);
+  --color-toast-failure-border: var(--color-error-1000-border);
+  --color-toast-failure-icon: var(--color-error-500);
+  --color-toast-failure-foreground: var(--color-neutral-0-foreground);
+  --color-toast-information: var(--color-brand-900);
+  --color-toast-information-border: var(--color-brand-1000-border);
+  --color-toast-information-icon: var(--color-brand-300);
+  --color-toast-information-foreground: var(--color-neutral-0-foreground);
+  --color-toast-notice: var(--color-warning-1000);
+  --color-toast-notice-border: var(--color-warning-1000-border);
+  --color-toast-notice-icon: var(--color-warning-700);
+  --color-toast-notice-foreground: var(--color-neutral-0-foreground);
+  --color-toast-success: var(--color-success-900);
+  --color-toast-success-border: var(--color-success-900-border);
+  --color-toast-success-icon: var(--color-success-700);
+  --color-toast-success-foreground: var(--color-neutral-0-foreground);
+}
+
+@layer base {
+  /* [data-sonner-toast][data-mounted="true"] {
+    --y: translateY(0) translateX(10%) !important;
+  } */
+  /* [data-sonner-toaster][data-x-position="center"] {
+    --width: 356px;
+    width: var(--width) !important;
+  } */
+  [data-sonner-toaster][data-sonner-theme="dark"] {
+    --success-bg: var(--color-success-900) !important;
+    --success-border: var(--color-success-900-border) !important;
+    --success-text: var(--color-neutral-0-foreground) !important;
+    --info-bg: var(--color-brand-900) !important;
+    --info-border: var(--color-brand-1000-border) !important;
+    --info-text: var(--color-neutral-0-foreground) !important;
+    --warning-bg: var(--color-warning-1000) !important;
+    --warning-border: var(--color-warning-1000-border) !important;
+    --warning-text: var(--color-neutral-0-foreground) !important;
+    --error-bg: var(--color-error-700) !important;
+    --error-border: var(--color-error-1000-border) !important;
+    --error-text: var(--color-neutral-0-foreground) !important;
+  }
+}

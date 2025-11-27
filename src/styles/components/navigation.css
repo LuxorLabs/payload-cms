@@ -1,0 +1,23 @@
+@theme {
+  --color-navigation-header-container: var(--color-layer-base);
+  --color-navigation-header-container-border: var(--color-neutral-900-border);
+  --color-navigation-header-dropdown-interacted: var(--color-layer-2);
+  --color-navigation-header-dropdown-rest: var(--color-neutral-0);
+  --color-navigation-header-dropdown-foreground: var(--color-neutral-0-foreground);
+  --color-navigation-header-dropdown-label: var(--color-neutral-900-foreground);
+  --color-navigation-header-link: var(--color-neutral-0);
+  --color-navigation-header-link-hovered-foreground: var(--color-neutral-0-foreground);
+  --color-navigation-header-link-interacted-foreground: var(--color-neutral-900-foreground);
+  --color-navigation-header-link-rest-foreground: var(--color-neutral-0-foreground);
+  --color-navigation-menu: var(--color-layer-2);
+  --color-navigation-menu-border: var(--color-neutral-1000-border);
+  --color-navigation-sidebar-container: var(--color-layer-base);
+  --color-navigation-sidebar-container-border: var(--color-neutral-1000-border);
+  --color-navigation-sidebar-item-rest: var(--color-neutral-0);
+  --color-navigation-sidebar-item-selected: var(--color-layer-2);
+  --color-navigation-sidebar-item-interacted-foreground: var(--color-neutral-0-foreground);
+  --color-navigation-sidebar-item-rest-foreground: var(--color-neutral-900-foreground);
+  --color-navigation-sidebar-sub-item: var(--color-neutral-0);
+  --color-navigation-sidebar-sub-item-interacted-foreground: var(--color-neutral-0-foreground);
+  --color-navigation-sidebar-sub-item-rest-foreground: var(--color-neutral-900-foreground);
+}

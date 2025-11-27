@@ -1,0 +1,12 @@
+@theme {
+  --color-window-backdrop: var(--color-layer-overlay);
+  --color-window-dialog-container-border: var(--color-neutral-1000-border);
+  --color-window-dialog-content: var(--color-layer-1);
+  --color-window-dialog-content-active: var(--color-layer-3);
+  --color-window-dialog-content-primary-foreground: var(--color-neutral-0-foreground);
+  --color-window-dialog-content-secondary-foreground: var(--color-neutral-900-foreground);
+  --color-window-dialog-footer: var(--color-layer-1);
+  --color-window-dialog-header: var(--color-layer-1);
+  --color-window-dialog-header-description: var(--color-neutral-900-foreground);
+  --color-window-dialog-header-title: var(--color-neutral-0-foreground);
+}

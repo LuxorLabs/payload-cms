@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { lexicalEditor, EXPERIMENTAL_TableFeature, BlocksFeature } from '@payloadcms/richtext-lexical'
+import { CodeBlock } from '@payloadcms/richtext-lexical'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -16,13 +17,8 @@ export const Posts: CollectionConfig = {
   },
   access: {
     read: ({ req: { user } }) => {
-      // Authenticated users (including API key auth) can read all posts
-      if (user) {
-        return true
-      }
-
-      // No authentication - deny access
-      return false
+      // Require authentication (session or API key) to read posts
+      return !!user
     },
     create: ({ req: { user } }) => {
       // Admin, Marketing, and Product can create posts
@@ -79,7 +75,13 @@ export const Posts: CollectionConfig = {
       type: 'richText',
       required: true,
       editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [...defaultFeatures],
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          EXPERIMENTAL_TableFeature(),
+          BlocksFeature({
+            blocks: [CodeBlock()],
+          }),
+        ],
       }),
     },
     {
