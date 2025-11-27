@@ -18,9 +18,11 @@ import { Posts } from './collections/Posts'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const cloudflareRemoteBindings = process.env.NODE_ENV === 'production'
+const isCLI = process.argv.some((value) => value.match(/^(generate|migrate):?/))
+const isProduction = process.env.NODE_ENV === 'production'
+
 const cloudflare =
-  process.argv.find((value) => value.match(/^(generate|migrate):?/)) || !cloudflareRemoteBindings
+  isCLI || !isProduction
     ? await getCloudflareContextFromWrangler()
     : await getCloudflareContext({ async: true })
 
@@ -54,9 +56,8 @@ function getCloudflareContextFromWrangler(): Promise<CloudflareContext> {
   return import(/* webpackIgnore: true */ `${'__wrangler'.replaceAll('_', '')}`).then(
     ({ getPlatformProxy }) =>
       getPlatformProxy({
-        // Don't pass environment in dev mode, use default (no named environment)
-        ...(process.env.CLOUDFLARE_ENV && { environment: process.env.CLOUDFLARE_ENV }),
-        experimental: { remoteBindings: cloudflareRemoteBindings },
+        environment: process.env.CLOUDFLARE_ENV,
+        remoteBindings: isProduction,
       } satisfies GetPlatformProxyOptions),
   )
 }

@@ -51,7 +51,7 @@ export const ContentSection = ({ post }: ContentProps) => {
             </div>
           )}
           {headings.length > 0 && (
-            <div className="mt-6">
+            <div className="mt-6 hidden lg:block">
               <h3 className="text-sm text-[#9ca3af]">Table of contents</h3>
               <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
               <ul className="space-y-2 text-sm text-white">
