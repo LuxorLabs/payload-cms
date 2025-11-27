@@ -75,9 +75,21 @@ pnpm wrangler d1 create tenki-blog
 
 # Create R2 bucket
 pnpm wrangler r2 bucket create public-tenki-blog
+pnpm wrangler r2 bucket update public-tenki-blog --public-access
+pnpm wrangler r2 bucket info public-tenki-blog
 ```
 
 Note: whether you want local dev to conenct to deployed cf resources is up to you...it doesn't matter which you choose we can change it anytime anyways
+
+### 4.5 Fill vars that required r2 public url 
+1. Update R2_PUBLIC_URL from .env and use the info from your last r2 command
+
+2. Update wrangler.jsonc with the R2_PUBLIC_URL
+```jsonc
+"vars": {
+  "R2_PUBLIC_URL": ""
+}
+```
 
 ### 5. Update wrangler.jsonc (POSSIBLY OPTIONAL)
 This step could be optional if you said Yes from "Would you like Wrangler to add it on your behalf? … yes" after you ran "pnpm wrangler {d1 or r2 bucket} create tenki-blog"
@@ -111,7 +123,7 @@ echo $NEW_SECRET
 ```
 
 ```bash
-echo $NEW_SECRET | pnpm wrangler secret put PAYLOAD_SECRET
+echo $NEW_SECRET | pnpm wrangler secret put PAYLOAD_SECRET --name tenki-blog
 ```
 
 then update your github actions secret, and .env "PAYLOAD_SECRET" 
@@ -129,8 +141,17 @@ This will:
 
 Your app will be available at: `https://tenki-blog.<your-subdomain>.workers.dev`
 
-## [TODO] Data schema not getting migrated to D1 Database 
--> in our conversation with claude it created migration.sql and executed it in d1. use that file  
+## 8. Migrate schema to remote D1
+```bash
+# Run migrations on remote
+NODE_ENV=production pnpm payload migrate
+```
+
+If above step did not work, try this.
+Please remember that migration.sql is just a backup incase initial deployment failed. As much as possible avoid relying on it
+```bash
+pnpm wrangler d1 execute tenki-blog --file=migration.sql
+```
 
 ## Connecting Local Dev to Remote Cloudflare Resources
 
