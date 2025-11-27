@@ -24,6 +24,15 @@ export const ContentSection = ({ post }: ContentProps) => {
     setCurrentUrl(window.location.href)
   }, [])
 
+  // Extract headings - hooks must be called before any conditional returns
+  const headings = useMemo(() => {
+    if (!post.content) return []
+    return extractHeadingsFromLexical(post.content)
+  }, [post.content])
+  const headingIds = useMemo(() => headings.map((h) => h.id), [headings])
+  const activeId = useActiveSection(headingIds)
+
+  // Check for required data after all hooks
   if (!post.content) {
     return null
   }
@@ -34,11 +43,6 @@ export const ContentSection = ({ post }: ContentProps) => {
   }
 
   const authorAvatar = author.avatar as Media
-
-  // Extract headings from Lexical content
-  const headings = useMemo(() => extractHeadingsFromLexical(post.content), [post.content])
-  const headingIds = useMemo(() => headings.map((h) => h.id), [headings])
-  const activeId = useActiveSection(headingIds)
 
   return (
     <section className="mx-auto grid w-full max-w-[1000px] grid-cols-1 gap-0 px-6 md:px-12 lg:grid-cols-3 lg:gap-[60px] xl:px-0">
