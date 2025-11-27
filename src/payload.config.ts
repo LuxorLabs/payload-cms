@@ -46,7 +46,14 @@ export default buildConfig({
     // storage-adapter-placeholder
     r2Storage({
       bucket: cloudflare.env.R2,
-      collections: { media: true },
+      collections: {
+        media: {
+          // Use R2 public URL to serve images directly, bypassing Workers
+          generateFileURL: ({ filename }) => {
+            return `${process.env.R2_PUBLIC_URL}/${filename}`
+          },
+        },
+      },
     }),
   ],
 })

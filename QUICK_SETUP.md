@@ -74,7 +74,7 @@ pnpm payload migrate:create
 pnpm wrangler d1 create tenki-blog
 
 # Create R2 bucket
-pnpm wrangler r2 bucket create tenki-blog
+pnpm wrangler r2 bucket create public-tenki-blog
 ```
 
 Note: whether you want local dev to conenct to deployed cf resources is up to you...it doesn't matter which you choose we can change it anytime anyways
@@ -98,7 +98,7 @@ Copy the `database_id` from the D1 creation output and update `wrangler.jsonc`:
 "r2_buckets": [
   {
     "binding": "R2",   // <-- Should be different from other cf resources bindings
-    "bucket_name": "tenki-blog",
+    "bucket_name": "public-tenki-blog",
   }
 ]
 ```

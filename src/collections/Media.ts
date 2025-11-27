@@ -3,7 +3,11 @@ import type { CollectionConfig } from 'payload'
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    read: () => true, // Public read access for blog images
+    read: ({ req: { user } }) => {
+      // Require authentication to read media metadata
+      // Images are served directly from R2 public URL
+      return !!user
+    },
     create: ({ req: { user } }) => {
       // Require authentication and viewers cannot create media
       if (!user) return false
