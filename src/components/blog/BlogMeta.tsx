@@ -27,6 +27,11 @@ function getContentText(content: any): string {
 }
 
 function readingTime(post: Post): string {
+  // Use stored readingTime if available, otherwise calculate from content
+  if (post.readingTime && post.readingTime > 0) {
+    return `${post.readingTime} min read`
+  }
+
   const contentText = getContentText(post.content)
   const minutes = calculateReadingTime(contentText)
   return `${minutes} min read`
