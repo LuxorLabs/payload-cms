@@ -12,7 +12,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative w-full overflow-hidden border-t border-white/8 bg-[#000A15]/60 backdrop-blur-xs backdrop-filter md:max-h-[400px]">
+    <footer className="relative isolate w-full overflow-hidden border-t border-white/8 md:max-h-[400px] lg:absolute lg:bottom-0">
       <FooterBackground />
       <div className="fade-overlay-top pointer-events-none absolute top-0 left-0 z-50 hidden h-28 w-full md:block" />
 
@@ -20,7 +20,7 @@ export function Footer() {
         <div className="z-50 flex flex-col gap-8 px-6 pt-6 md:mx-auto md:w-full md:flex-row md:justify-between md:px-16 md:pt-8 lg:px-6 lg:pt-12 xl:px-0">
           <div className="flex flex-col gap-4 md:max-w-[228px] lg:max-w-[250px]">
             <div className="flex flex-col gap-2">
-              <Link href="/" aria-label="home" className="flex items-center space-x-2">
+              <Link href="/blog" aria-label="home" className="flex items-center space-x-2">
                 <Logo />
               </Link>
               <p className="text-static-secondary text-sm">Tenki. Free to start. Priced to scale.</p>
