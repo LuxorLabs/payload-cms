@@ -32,6 +32,16 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      icons: [{ url: '/images/favicon-default.png' }],
+      titleSuffix: '- Tenki',
+    },
+    components: {
+      graphics: {
+        Logo: './components/logo#Logo',
+        Icon: './components/logo#Icon',
+      },
+    },
   },
   collections: [Users, Media, Authors, Categories, Tags, Posts],
   editor: lexicalEditor(),

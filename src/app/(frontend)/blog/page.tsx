@@ -6,9 +6,9 @@ import { HeroSection } from '@/components/blog/HeroSection'
 import type { Post, Tag } from '@/payload-types'
 
 export const metadata = {
-  title: 'Tenki Blog',
+  title: 'Tenki Blog | Product Updates, Guides, Tutorials, & Tips',
   description:
-    'This is where our engineers and team share product updates, in-depth breakdowns, and insights on all things Tenki — plus the stories and moments that have shaped our journey.',
+    'Tenki Blog',
 }
 
 export const revalidate = 60

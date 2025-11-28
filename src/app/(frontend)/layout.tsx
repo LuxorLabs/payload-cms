@@ -11,8 +11,9 @@ const geist = Geist({
 })
 
 export const metadata = {
-  description: 'Tenki Blog - Insights, updates, and stories from the Tenki team',
+  description: 'Tenki Blog',
   title: 'Tenki Blog',
+  icons: [{ url: '/images/favicon-default.png' }],
 }
 
 export default async function RootLayout(props: { children: React.ReactNode }) {
