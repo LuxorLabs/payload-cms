@@ -81,7 +81,7 @@ export const BlogMeta = ({ post }: BlogMetaProps) => {
               <Button
                 variant="link"
                 onClick={copyArticleLink}
-                className="h-min p-0 font-medium text-blue-500 underline underline-offset-1 hover:text-blue-400"
+                className="text-cta-link-rest h-min p-0 font-medium underline underline-offset-1"
               >
                 {copied ? '✓ Article Link Copied' : 'Copy Article Link'}
               </Button>

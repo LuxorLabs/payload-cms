@@ -140,9 +140,14 @@ function serializeLexical(node: any): React.ReactNode {
     return text
   }
 
-  // Handle line break
+  // Handle line break - add vertical spacing to match paragraph margins
   if (node.type === 'linebreak') {
-    return <br />
+    return (
+      <>
+        <br />
+        <span className="block h-4" />
+      </>
+    )
   }
 
   return null

@@ -56,7 +56,7 @@ export const ContentSection = ({ post }: ContentProps) => {
           )}
           {headings.length > 0 && (
             <div className="mt-6 hidden lg:block">
-              <h3 className="text-sm text-[#9ca3af]">Table of contents</h3>
+              <h3 className="text-static-secondary text-sm">Table of contents</h3>
               <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
               <ul className="space-y-2 text-sm text-white">
                 {headings.map((heading) => (
@@ -84,7 +84,7 @@ export const ContentSection = ({ post }: ContentProps) => {
             </div>
           )}
           <div className="mt-6">
-            <h3 className="text-sm text-[#9ca3af]">Author</h3>
+            <h3 className="text-static-secondary text-sm">Author</h3>
             <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
             <div className="mt-2.5 flex items-center gap-2">
               <div className="relative size-9">
@@ -120,7 +120,7 @@ export const ContentSection = ({ post }: ContentProps) => {
             </div>
           </div>
           <div className="mt-6">
-            <h3 className="text-sm text-[#9ca3af]">Share</h3>
+            <h3 className="text-static-secondary text-sm">Share</h3>
             <hr className="relative mt-2 h-px min-w-fit border-t border-white/20" />
             <div className="mt-2.5 flex gap-2">
               <Button
@@ -130,7 +130,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     setTimeout(() => setCopied(false), 3000)
                   })
                 }}
-                className="cursor-pointer hover:border-[#9ca3af]"
+                className="hover:border-static-secondary cursor-pointer"
                 variant="secondary"
                 size="icon"
               >
@@ -144,7 +144,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-[#9ca3af]'
+                  'hover:border-static-secondary'
                 )}
               >
                 <XLogoIcon size={20} />
@@ -157,7 +157,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-[#9ca3af]'
+                  'hover:border-static-secondary'
                 )}
               >
                 <RedditLogoIcon weight="fill" size={20} />
@@ -170,7 +170,7 @@ export const ContentSection = ({ post }: ContentProps) => {
                     variant: 'secondary',
                     size: 'icon',
                   }),
-                  'hover:border-[#9ca3af]'
+                  'hover:border-static-secondary'
                 )}
               >
                 <LinkedinWhiteLogo />
