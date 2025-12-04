@@ -35,7 +35,7 @@ export const NavSubmenu = ({ submenu, isVisible, onHover, onLeave }: NavSubmenuP
           transition={{ type: 'spring', stiffness: 120, damping: 12 }}
           className={cn('absolute top-[calc(100%)] left-1/2 z-50 -translate-x-1/2')}
         >
-          <div className="mt-6 flex min-h-[152px] min-w-[632px] items-start justify-center gap-x-2 rounded-[10px] border border-[#003875]/8 bg-[#000f21] p-2 shadow-lg">
+          <div className="bg-brand-1000 border-brand-600/8 mt-6 flex min-h-[152px] min-w-[632px] items-start justify-center gap-x-2 rounded-[10px] border p-2 shadow-lg">
             {submenu.map((sub) => {
               return (
                 <Link key={sub.label} href={sub.href}>

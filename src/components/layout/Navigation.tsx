@@ -1,9 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CaretDownIcon, ListIcon, XIcon } from '@phosphor-icons/react'
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
@@ -17,69 +18,67 @@ const TENKI_STORAGE_BASE = 'https://storage.googleapis.com/tenki-cloud-assets/we
 
 interface NavItem {
   label: string
-  href?: string
+  href: string
   submenu?: NavSubmenuItem[]
 }
 
 const navItems: NavItem[] = [
+  { label: 'Overview', href: '/' },
   {
     label: 'Features',
-    href: 'https://tenki.cloud/features',
+    href: '/features',
     submenu: [
       {
         label: 'Linux Runners',
-        href: 'https://tenki.cloud/features/linux',
+        href: '/features/linux',
         image: `${TENKI_STORAGE_BASE}/nav-linux-runners.png`,
         icon: NavLinuxIcon,
         soon: false,
       },
       {
         label: 'Mac Runners',
-        href: 'https://tenki.cloud/features/mac',
+        href: '/features/mac',
         image: `${TENKI_STORAGE_BASE}/nav-mac-runners.png`,
         icon: NavAppleIcon,
         soon: true,
       },
       {
         label: 'Virtual Machines',
-        href: 'https://tenki.cloud/features/virtual-machine',
+        href: '/features/virtual-machine',
         image: `${TENKI_STORAGE_BASE}/nav-vm.png`,
         icon: NavVmIcon,
         soon: true,
       },
     ],
   },
-  { label: 'Overview', href: 'https://tenki.cloud' },
-  { label: 'Pricing', href: 'https://tenki.cloud/pricing' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Docs', href: 'https://tenki.cloud/docs' },
-  { label: 'Careers', href: 'https://tenki.cloud/careers' },
+  { label: 'Docs', href: '/docs' },
+  { label: 'Careers', href: '/careers' },
 ]
 
 export const Navigation = () => {
-  const [scrolled, setScrolled] = useState(false)
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const currentPath = usePathname()
+  const { scrollY } = useScroll()
+
+  const [hoveredNavItem, setHoveredNavItem] = useState<number | null>(null)
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false)
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    setScrolled(latest > 50)
+  })
 
-  const isNavItemActive = (currentPath: string, href?: string) =>
-    href && (currentPath === href || (href !== '/' && currentPath.startsWith(href)))
+  const isNavItemActive = (currentPath: string, href: string) =>
+    currentPath === href || (href !== '/' && currentPath.startsWith(href))
 
   return (
     <header className={cn('flex w-full justify-center')}>
-      <nav
+      <motion.nav
         className={cn(
-          'fixed z-[999] w-full border-[#1D232A] transition-all duration-300 ease-in-out',
-          scrolled && 'xl:mt-6 xl:w-[1200px] xl:rounded-xl xl:border',
+          'fixed z-[999] w-full max-w-[1200px] rounded-xl border-[#1D232A] transition-all duration-300 ease-in-out xl:mt-3',
+          scrolled && 'xl:mt-6 xl:max-w-[1200px] xl:rounded-xl xl:border',
         )}
         onMouseLeave={() => {
           setOpenSubmenu(null)
@@ -92,13 +91,13 @@ export const Navigation = () => {
       >
         <div
           className={cn(
-            'relative mx-auto flex max-w-[1200px] items-center justify-between px-3 py-3 transition-colors duration-300 lg:gap-0',
+            'relative mx-auto flex items-center justify-between px-3 py-3 transition-colors duration-300 lg:gap-0',
             'md:px-10 xl:mt-0 xl:rounded-lg xl:border-0 xl:px-4 xl:backdrop-blur-none',
-            isSheetOpen && 'border-b-0.5 mx-2 mt-3.5 rounded-t-lg border border-white/8 px-2 md:px-2',
+            isSheetOpen && 'border-b-0.5 mx-2 mt-3.5 rounded-t-lg border border-white/8 px-2 md:px-4',
           )}
         >
           <div className="flex items-center justify-between lg:min-w-44">
-            <Link href="/blog" aria-label="home" className="flex items-center space-x-2">
+            <Link href="/" aria-label="home" className="flex items-center space-x-2">
               <Logo />
             </Link>
           </div>
@@ -108,19 +107,19 @@ export const Navigation = () => {
             className="mx-auto hidden divide-x divide-solid divide-white/[4%] rounded-lg lg:flex"
           >
             {navItems.map((item, idx) => {
-              const isActive = isNavItemActive(pathname, item.href)
-              const showBackground = hoveredIndex === idx
+              const isActive = isNavItemActive(currentPath, item.href)
+              const showBackground = hoveredNavItem === idx
               const isSubMenuOpen = openSubmenu === idx
 
               return (
                 <li
                   key={`nav-desktop-${idx}`}
                   onMouseEnter={() => {
-                    setHoveredIndex(idx)
+                    setHoveredNavItem(idx)
                     setOpenSubmenu(idx)
                   }}
                   onMouseLeave={() => {
-                    setHoveredIndex(null)
+                    setHoveredNavItem(null)
                     setOpenSubmenu(null)
                   }}
                   className={cn(
@@ -128,9 +127,23 @@ export const Navigation = () => {
                     isActive && 'text-static-primary',
                   )}
                 >
-                  {showBackground && (
-                    <span className="bg-layer-3 absolute inset-0 -z-10 size-full rounded-[4px]" />
-                  )}
+                  <AnimatePresence>
+                    {showBackground && (
+                      <motion.span
+                        layoutId={scrolled ? 'nav-hover-scrolled' : 'nav-hover'}
+                        className="bg-layer-3 absolute inset-0 -z-10 size-full rounded-[4px]"
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: 1,
+                          transition: { duration: 0.4 },
+                        }}
+                        exit={{
+                          opacity: 0,
+                          transition: { duration: 0.3 },
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
                   {item.submenu ? (
                     <>
                       <div className="relative flex cursor-pointer items-center gap-0.5">
@@ -145,7 +158,7 @@ export const Navigation = () => {
                       />
                     </>
                   ) : (
-                    <Link href={item.href!} className="relative">
+                    <Link href={item.href} className="relative">
                       {item.label}
                     </Link>
                   )}
@@ -197,7 +210,7 @@ export const Navigation = () => {
                 </Button>
               </SheetTrigger>
               <SheetContent
-                className="inset-0 mt-14 min-w-screen bg-[#000D1B]/90 px-2 backdrop-blur-sm"
+                className="inset-0 mt-14 min-w-screen bg-[#000D1B]/90 px-2 backdrop-blur-sm lg:hidden"
                 side={'left'}
               >
                 <SheetHeader className="hidden">
@@ -213,26 +226,21 @@ export const Navigation = () => {
                           <li
                             className={cn(
                               'text-static-secondary flex cursor-pointer items-center justify-between px-3 py-4 text-sm',
-                              item.href &&
-                                pathname.includes(item.href) &&
-                                'text-static-primary font-bold',
+                              item.href && currentPath.includes(item.href) && 'text-static-primary font-bold',
                             )}
                             onClick={() => setOpenSubmenu(isOpen ? null : idx)}
                           >
                             <span>{item.label}</span>
-                            <CaretDownIcon
-                              size={16}
-                              className={cn('transition-transform', isOpen && 'rotate-180')}
-                            />
+                            <CaretDownIcon size={16} className={cn('transition-transform', isOpen && 'rotate-180')} />
                           </li>
                         ) : (
                           <li>
                             <Link
-                              href={item.href!}
+                              href={item.href}
                               onClick={() => setIsSheetOpen(false)}
                               className={cn(
                                 'text-static-secondary flex justify-between px-3 py-4 text-sm',
-                                pathname === item.href && 'text-static-primary font-bold',
+                                currentPath === item.href && 'text-static-primary font-bold',
                               )}
                             >
                               {item.label}
@@ -242,10 +250,7 @@ export const Navigation = () => {
                         {hasSubmenu &&
                           isOpen &&
                           item.submenu?.map((sub, sIdx) => (
-                            <li
-                              key={sIdx}
-                              className="text-static-secondary flex items-center gap-2 px-6 py-4 text-sm"
-                            >
+                            <li key={sIdx} className="text-static-secondary flex items-center gap-2 px-6 py-4 text-sm">
                               {sub.icon && <sub.icon className="size-4" />}
                               <Link href={sub.href} onClick={() => setIsSheetOpen(false)}>
                                 {sub.label}
@@ -260,7 +265,7 @@ export const Navigation = () => {
             </Sheet>
           </div>
         </div>
-      </nav>
+      </motion.nav>
     </header>
   )
 }

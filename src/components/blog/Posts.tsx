@@ -83,7 +83,7 @@ export const Posts = ({ posts, tags }: PostsProps) => {
   }
 
   return (
-    <section className="relative mx-auto mt-6 max-w-5xl px-6 md:px-12 xl:px-0">
+    <section className="relative mx-auto mt-6 max-w-5xl px-6 md:mb-28 md:px-12 xl:px-0">
       <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-wrap gap-2">
           {tagNames.map((tag) => (
